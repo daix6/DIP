@@ -4,7 +4,7 @@
 import os
 from PIL import Image
 
-from scaling import scaling_nni, scaling_bilinear
+from scaling import scale
 
 dist = "../dist/"
 
@@ -22,7 +22,7 @@ def test_scale(filename):
     print "Scaling case %d" % expections.index(case)
 
     for size in case:
-      out = scaling_bilinear(im, size)
+      out = scale(im, size)
 
       out_name = "scaling-%dx%d.png" % out.size
       out_path = os.path.join(dist, out_name)

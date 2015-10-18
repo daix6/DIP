@@ -2,17 +2,49 @@
 # -*- coding: utf-8 -*-
 
 from PIL import Image
+from scipy import interpolate
 
 import os
 import math
+import numpy
 
-# nearest neighbor interpolation
-def scaling_nni(input_img, size):
+def scale(input_img, size):
+  # basic infomation
+  in_size = input_img.size
+  in_width, in_height = in_size
+  out_width, out_height = size
+
+  # compute the ratio
+  width_ratio = float(in_width) / out_width
+  height_ratio = float(in_height) / out_height
+
+  # x: right, y: down  
+  x = numpy.arange(0.0, in_width, width_ratio)
+  y = numpy.arange(0.0, in_height, height_ratio)
+
+  in_pixels = []
+  for in_y in range(in_height):
+    row = []
+    for in_x in range(in_width):
+      row.append(input_img.getpixel((in_x, in_y)))
+    in_pixels.append(row)
+
+  interpolation = interpolate.RectBivariateSpline(\
+    numpy.arange(in_height), # y
+    numpy.arange(in_width),  # x
+    numpy.array(in_pixels)  # original pixels
+  )
+
+  pixels = interpolation(y, x)
+
+  return createImage(input_img.mode, size, pixels)
+
+# Without scipy version
+def scaling(input_img, size):
   """ Scaling the given picture with Nearest Neighbor Interpolation algorithm.
   input_img Image
   size      tuple
   """
-
   # basic infomation
   in_size = input_img.size
   in_width, in_height = in_size
@@ -33,27 +65,8 @@ def scaling_nni(input_img, size):
       in_y = round(out_y * height_ratio)
       row.append(input_img.getpixel((in_x, in_y)))
     out_pixels.append(row)
-  
-  return createImage(input_img.mode, size, out_pixels)
 
-def scaling_bilinear(input_img, size):
-  """ Scaling the given picture with Blinear Interpolation algorithm.
-  input_img Image
-  size      tuple
-  """
-
-  # basic infomation
-  in_size = input_img.size
-  in_width, in_height = in_size
-  out_width, out_height = size
-
-  # compute the ratio
-  width_ratio = float(in_width) / out_width
-  height_ratio = float(in_height) / out_height
-
-  out_pixels = []
-
-  # x: right, y: down  
+  """ Blinear Interpolation
   for out_y in range(out_height):
     row = []
     for out_x in range(out_width):
@@ -77,11 +90,8 @@ def scaling_bilinear(input_img, size):
               u*v*input_img.getpixel((i+1, j+1))
 
       row.append(int(color))
-
-    out_pixels.append(row)
-
+  """
   return createImage(input_img.mode, size, out_pixels)
-
 
 
 def createImage(mode, size, pixels):
@@ -94,6 +104,6 @@ def createImage(mode, size, pixels):
 
   for y in range(size[1]):
     for x in range(size[0]):
-      out.putpixel((x,y), pixels[y][x])
+      out.putpixel((x,y), int(pixels[y][x]))
 
   return out
