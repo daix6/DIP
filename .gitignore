@@ -1,5 +1,8 @@
 basic/
 
+## code
+*.pyc
+
 ## report
 
 hw1/assets/*
