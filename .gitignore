@@ -2,5 +2,8 @@ basic/
 
 ## report
 
+hw1/assets/*
+!hw1/assets/43.png
+
 **/doc/*
 !**/doc/*.md

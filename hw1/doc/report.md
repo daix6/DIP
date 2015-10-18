@@ -18,12 +18,18 @@
 
 1. There is no 4-path between p and q since $N_{4} q = \emptyset$.
 
-2. There is one shortest path between p and q with length 4.
+2. There is one shortest path between p and q with length 4, from $(3,0) \to (2,1) \to (2,2) \to (2,3) \to (1,4)$.
 
-3. There is one shortest path between p and q with length 4.
+3. There is one shortest path between p and q with length 5, from $(3,0) \to (2,0) \to (2,1) \to (2,2) \to (2,3) \to (1,4)$
 
 #### 1.3 Logical Operations
 
 1. $A \cap B \cap C$
-2. $(A \cap B) \cup (B \cap C) \cup (A \cap C)$
+2. $(A \cap B) \cup (A \cap C) \cup (B \cap C)$
 3. $(\overline{A} \cap B \cap \overline{C}) \cup (A \cap \overline{B} \cap C)$ 
+
+### 2 Programming Tasks
+
+#### 2.2 Scaling
+
+#### 2.3 Quantization
