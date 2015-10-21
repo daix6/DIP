@@ -5,6 +5,7 @@ import os
 from PIL import Image
 
 from scaling import scale
+from quantization import quantize
 
 dist = "../dist/"
 
@@ -29,8 +30,25 @@ def test_scale(filename):
       out.save(out_path)
       print "    Picture %s has been saved to the assets folder !" % out_name
 
+def test_quantize(filename):
+  im = Image.open(filename)
+
+  # different cases
+  expections = [128, 32, 8, 4, 2]
+
+  print "Quantiztion"
+  for level in expections:
+    out = quantize(im, level)
+
+    out_name = "quantization-%d.png" % level
+    out_path = os.path.join(dist, out_name)
+    out.save(out_path)
+    print "    Picture %s has been saved to the assets folder !" % out_name
+
 def main():
   test_scale("../assets/43.png")
+  print "--------------------------------------------------"
+  test_quantize("../assets/43.png")
 
 if __name__ == '__main__':
   main()

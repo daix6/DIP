@@ -35,7 +35,7 @@ def scale(input_img, size):
     numpy.array(in_pixels)  # original pixels
   )
 
-  pixels = interpolation(y, x)
+  pixels = interpolation(y, x) # __call__(x, y)
 
   return createImage(input_img.mode, size, pixels)
 
