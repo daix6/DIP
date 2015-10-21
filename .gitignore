@@ -10,3 +10,7 @@ hw1/assets/*
 
 **/doc/*
 !**/doc/*.md
+
+## JS
+
+node_modules/

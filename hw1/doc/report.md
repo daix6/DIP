@@ -64,29 +64,30 @@ function scale(input_img, size) return output_img
 结果是由双三次插值算法得到的。
 
 <center>
-![original](../assets/43.png)
-<p>最初的图像</p>
-![192x128](../dist/scaling-192x128.png)
-<p>Scaling to 192x128</p>
-![96x64](../dist/scaling-96x64.png)
-<p>Scaling to 96x64</p>
-![48x32](../dist/scaling-48x32.png)
-<p>Scaling to 48x32</p>
-![24x16](../dist/scaling-24x16.png)
-<p>Scaling to 24x16</p>
-![12x8](../dist/scaling-12x8.png)
-<p>Scaling to 12x8</p>
-![300x200](../dist/scaling-300x200.png)
-<p>Scaling to 300x200</p>
-![450x300](../dist/scaling-450x300.png)
-<p>Scaling to 450x300</p>
-![500x200](../dist/scaling-500x200.png)
-<p>Scaling to 500x200</p>
+	![original](../assets/43.png)
+	<p>最初的图像</p>
+	![192x128](../dist/scaling-192x128.png)
+	<p>Scaling to 192x128</p>
+	![96x64](../dist/scaling-96x64.png)
+	<p>Scaling to 96x64</p>
+	![48x32](../dist/scaling-48x32.png)
+	<p>Scaling to 48x32</p>
+	![24x16](../dist/scaling-24x16.png)
+	<p>Scaling to 24x16</p>
+	![12x8](../dist/scaling-12x8.png)
+	<p>Scaling to 12x8</p>
+	![300x200](../dist/scaling-300x200.png)
+	<p>Scaling to 300x200</p>
+	![450x300](../dist/scaling-450x300.png)
+	<p>Scaling to 450x300</p>
+	![500x200](../dist/scaling-500x200.png)
+	<p>Scaling to 500x200</p>
 </center>
 
 ### 2.2 量化
 
 #### 2.2.1 分析
+
 对灰度图像来说，量化非常简单。对每个新的灰度级别建立一个新的调色板（palette），然后根据原图每个像素的灰度值在调色板中找到最接近的那个，然后放到新的图片中即可。
 
 #### 2.2.2 算法
@@ -106,16 +107,16 @@ function quantize(input_img, level) return output_img
 #### 2.2.3 结果
 
 <center>
-![original](../assets/43.png)
-<p>最初的图像</p>
-![128](../dist/quantization-128.png)
-<p>128 gray levels</p>
-![32](../dist/quantization-32.png)
-<p>32 gray levels</p>
-![8](../dist/quantization-8.png)
-<p>8 gray levels</p>
-![4](../dist/quantization-4.png)
-<p>4 gray levels</p>
-![2](../dist/quantization-2.png)
-<p>2 gray levels</p>
+	![original](../assets/43.png)
+	<p>最初的图像</p>
+	![128](../dist/quantization-128.png)
+	<p>128 gray levels</p>
+	![32](../dist/quantization-32.png)
+	<p>32 gray levels</p>
+	![8](../dist/quantization-8.png)
+	<p>8 gray levels</p>
+	![4](../dist/quantization-4.png)
+	<p>4 gray levels</p>
+	![2](../dist/quantization-2.png)
+	<p>2 gray levels</p>
 </center>
