@@ -66,7 +66,7 @@ def scaling(input_img, size):
       row.append(input_img.getpixel((in_x, in_y)))
     out_pixels.append(row)
 
-  """ Blinear Interpolation
+  """ Bilinear Interpolation
   for out_y in range(out_height):
     row = []
     for out_x in range(out_width):
@@ -78,7 +78,7 @@ def scaling(input_img, size):
       u = temp_x - i
       v = temp_y - j
 
-      # the range problem
+      # avoid overflow
       if (i+1>=in_width):
         i = in_width-2
       if (j+1>=in_height):
