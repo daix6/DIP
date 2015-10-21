@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 from PIL import Image
 
 from scaling import scale
 from quantization import quantize
 
-dist = "../dist/"
-
-def test_scale(filename):
+def test_scale(filename, dist):
   im = Image.open(filename)
 
   # different cases from given problems
@@ -30,7 +29,7 @@ def test_scale(filename):
       out.save(out_path)
       print "    Picture %s has been saved to the assets folder !" % out_name
 
-def test_quantize(filename):
+def test_quantize(filename, dist):
   im = Image.open(filename)
 
   # different cases
@@ -46,9 +45,14 @@ def test_quantize(filename):
     print "    Picture %s has been saved to the assets folder !" % out_name
 
 def main():
-  test_scale("../assets/43.png")
-  print "--------------------------------------------------"
-  test_quantize("../assets/43.png")
+  file_dir = os.path.dirname(os.path.realpath(__file__))
+  parent_dir = os.path.split(file_dir)[0]
+  dist_dir = os.path.join(parent_dir, 'dist')
+  filename = os.path.join(parent_dir, 'assets', '43.png')
+
+  test_scale(filename, dist_dir)
+  print ""
+  test_quantize(filename, dist_dir)
 
 if __name__ == '__main__':
   main()
