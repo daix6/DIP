@@ -1,0 +1,26 @@
+doctype html
+html
+  head
+    block title
+    meta(http-equiv='Content-Type' content='text/html')
+    meta(name="keywords" content="Image, DIP, Digital Image Processing, JavaScript, canvas")
+    script.
+      var ctx_ = document.createElement('canvas').getContext
+      if (!ctx_)
+        alert("You browser doesn't support canvas!");
+    link(rel='stylesheet' href='./nav.css')
+    block style
+  body
+    div#nav
+      div.last
+        span
+          block last
+      div.content
+        span 
+          a(href='./index.html') Digital Image Processing
+      div.next
+        span
+          block next
+    block content
+    script(src='./nav.js' type='text/javascript')
+    block scripts

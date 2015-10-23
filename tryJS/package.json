@@ -16,6 +16,7 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-gh-pages": "^0.5.4",
+    "gulp-jade": "^1.1.0",
     "gulp-livereload": "^3.8.1",
     "gulp-load-plugins": "^1.0.0",
     "st": "^1.0.0"
