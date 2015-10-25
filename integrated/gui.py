@@ -7,7 +7,6 @@ from bisect import bisect_right
 from PIL import Image
 from PyQt4 import QtGui
 
-
 # Create an empty window
 class main_window(QtGui.QMainWindow):
   def __init__(self):
@@ -45,8 +44,13 @@ class main_window(QtGui.QMainWindow):
 
     # binarization
     binarization = QtGui.QAction('Binarization', self)
-    binarization.setStatusTip('Binarize the picture, only make sense to grayscale image.')
+    binarization.setStatusTip('Binarize the image')
     binarization.triggered.connect(self.binarize)
+
+    # quantization
+    quantization = QtGui.QAction('Quantization', self)
+    quantization.setStatusTip('Quantize the image')
+    quantization.triggered.connect(self.quantize)
 
     # Menu Bar
     menu = self.menuBar()
@@ -57,6 +61,7 @@ class main_window(QtGui.QMainWindow):
     file_menu.addAction(exit_action)
     process_menu = menu.addMenu('&Transform')
     process_menu.addAction(binarization)
+    process_menu.addAction(quantization)
 
     # Status Bar
     self.statusBar()
@@ -117,19 +122,54 @@ class main_window(QtGui.QMainWindow):
     ''' Binarization
     Binarize the image~
     '''
-    if (self.current.mode != 'L'):
-      return
+    self.quantize(2)
 
-    w, h = self.current.size
-    for y in range(h):
-      for x in range(w):
-        p = self.current.getpixel((x, y))
-        if p <= 127:
-          self.current.putpixel((x, y), 0)
-        else:
-          self.current.putpixel((x, y), 255)
+  def quantize(self, level = None):
+    ''' Binarization
+    Binarize the image with level
+    '''
+    if not self.current:
+      ok = QtGui.QMessageBox.critical(self, 'Wrong behavior', 'You have not opened a file yet!')
+      if (ok == QtGui.QMessageBox.Ok):
+        return
+    
+    if not (self.current.mode in ['L', 'RGB']):
+      ok = QtGui.QMessageBox.critical(self, 'Wrong image', 'I can only process RGB / grayscale image!')
+      if (ok == QtGui.QMessageBox.Ok):
+        return
 
-    self.update_image()
+    if not level:
+      level, ok = QtGui.QInputDialog.getInt(self, 'Please input the level you want to quantize to:',\
+        'Level:', 0, 1, 255, 1)
+ 
+    # judge level first, so level 2 pass~
+    if level or ok:
+      palette = [255 * p / (level - 1) for p in range(level)]
+      w, h = self.current.size
+
+      for y in range(h):
+        for x in range(w):
+          p = self.current.getpixel((x,y))
+          if self.current.mode == 'RGB':
+            p = p[0]
+
+          i = bisect_right(palette, p)
+          if i == len(palette) or palette[i] - p > p - palette[i-1]:
+            out_p = palette[i-1]
+          else:
+            out_p = palette[i]
+
+          if self.current.mode == 'RGB':
+            out_p = (out_p, out_p, out_p)
+
+          self.current.putpixel((x,y), out_p)
+
+      self.update_image()
+
+  def closeEvent(self, e):
+    if self.TEMP in os.listdir(os.getcwd()):
+      os.remove(self.TEMP)
+    super(main_window, self).closeEvent(e)
 
 # Main Function
 def main():
