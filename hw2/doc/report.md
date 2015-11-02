@@ -13,13 +13,11 @@ $$ c_k =\frac{L-1}{MN} \sum_{i = 0}^{i_k}s_i = s_k$$
 
 ### 1.2 空间滤波
 
-1. 结果：
-
-$\left[ \begin{array}{ccc}
--177 & -420 & -279 & -271 \newline
--74 & -72 & -90 & 52 \newline
-61 & 131 & 2 & 19 \newline
-172 & 199 & 215 & 60 \end{array} \right]$
+1. 结果：$$\left[ \begin{array}{ccc}
+  -177 & -420 & -279 & -271 \newline
+  -74 & -72 & -90 & 52 \newline
+  61 & 131 & 2 & 19 \newline
+  172 & 199 & 215 & 60 \end{array} \right]$$
 
 2. 正值代表该点上方比下方更亮，负值代表上方比下方更暗。
 
