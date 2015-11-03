@@ -14,7 +14,7 @@ def plot_hist(input_img, dist):
     plt.xlim((0, 256))
     plt.hist(data, 256, color='black')
     plt.savefig(dist)
-    print "Histogram has been save to %s." % dist
+    print 'Histogram has been save to {0}.'.format(dist)
 
 def equalize_hist(input_img):
     size = input_img.width * input_img.height
