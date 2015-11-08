@@ -6,7 +6,7 @@ import sys
 from PIL import Image
 
 from histogram import plot_hist, equalize_hist
-from filter import filter2d, smooth, laplacian, high_boost
+from filter import filter2d, smooth, laplacian, origin, high_boost
 
 def test_plot_hist(filename, dist):
   im = Image.open(filename)
@@ -35,7 +35,7 @@ def test_smooth_filter(filename, dist):
 def test_laplacian_filter(filename, dist):
   im = Image.open(filename)
 
-  result = filter2d(im, laplacian)
+  result = filter2d(im, laplacian + origin)
   out_name = 'laplacian.png'
   out_path = os.path.join(dist, out_name)
   result.save(out_path)
