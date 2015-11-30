@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from numpy import arctan, tan, array
 from math import floor, sqrt, pi
 from PIL import Image
