@@ -6,6 +6,13 @@ from PIL import Image
 
 from dft2d import *
 
+def saving(func):
+  def __decorator(*args, **kwargs):
+    print '  Begin to saving image.'
+    func(*args, **kwargs)
+    print '  Finish saving ' + args[1] + '.'
+  return __decorator
+
 def main():
   # Arguments
   parser = argparse.ArgumentParser()
@@ -25,22 +32,26 @@ def main():
     raise Exception("There is no folder named " + dist_dir + ".")
 
   # Helper
+  @saving
   def save_image(data, name, dist=dist_dir):
     ''' Save image as dist/name.
     data: A 2d matrix
     '''
-    if len(data.shape) == 1:
+    if len(data.shape) != 2:
       raise Exception("Wrong data when saving file")
 
     Image.fromarray(data).convert('L').save(os.path.join(dist, name))
 
   image = Image.open(filename)
 
-  # DFT and IDFT
+  # DFT
   image_dft = dft2d(image, 1)
   image_dft_shift = shift(image_dft) # Centralize
   image_dft_scaling = scaling(np.log(1 + np.abs(image_dft_shift))) # 1 for avoid ln(0)
   save_image(image_dft_scaling, 'dft-spectrum.png')
+
+  # IDFT
+  save_image(dft2d(image_dft, -1).real, 'idft-dft.png')
 
 if __name__ == '__main__':
   main()
