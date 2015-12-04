@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import os, argparse
-from PIL import Image
 
 from dft2d import *
+from filter import *
 
 def saving(func):
   def __decorator(*args, **kwargs):
@@ -45,13 +45,24 @@ def main():
   image = Image.open(filename)
 
   # DFT
-  image_dft = dft2d(image, 1)
-  image_dft_shift = shift(image_dft) # Centralize
-  image_dft_scaling = scaling(np.log(1 + np.abs(image_dft_shift))) # 1 for avoid ln(0)
-  save_image(image_dft_scaling, 'dft-spectrum.png')
+  # image_dft = dft2d(image, 1)
+  # image_dft_shift = shift(image_dft) # Centralize
+  # image_dft_scaling = scaling(np.log(1 + np.abs(image_dft_shift))) # 1 for avoid ln(0)
+  # save_image(image_dft_scaling, 'dft-spectrum.png')
 
-  # IDFT
-  save_image(dft2d(image_dft, -1).real, 'idft-dft.png')
+  # # IDFT
+  # save_image(dft2d(image_dft, -1).real, 'idft-dft.png')
+
+  ## Filter
+  # Smooth with 7x7
+  image_smooth = filter2d_freq(image, smooth)
+  save_image(image_smooth, 'smooth-7x7.png')
+
+  image_sharp = filter2d_freq(image, laplacian)
+  save_image(image_sharp, 'sharp-laplacian.png')
+
+  image_plus_sharp = filter2d_freq(image, laplacian + origin)
+  save_image(image_plus_sharp, 'origin-with-edge.png')
 
 if __name__ == '__main__':
   main()
