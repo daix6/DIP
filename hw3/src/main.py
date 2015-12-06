@@ -2,16 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os, argparse
+from utils import *
 
-from dft2d import *
+from dft2d import dft2d
 from filter import *
-
-def saving(func):
-  def __decorator(*args, **kwargs):
-    print '  Begin to saving image.'
-    func(*args, **kwargs)
-    print '  Finish saving ' + args[1] + '.'
-  return __decorator
+from fft2d import fft2d
 
 def main():
   # Arguments
@@ -45,13 +40,13 @@ def main():
   image = Image.open(filename)
 
   # DFT
-  # image_dft = dft2d(image, 1)
-  # image_dft_shift = shift(image_dft) # Centralize
-  # image_dft_scaling = scaling(np.log(1 + np.abs(image_dft_shift))) # 1 for avoid ln(0)
-  # save_image(image_dft_scaling, 'dft-spectrum.png')
+  image_dft = dft2d(image, 1)
+  image_dft_shift = shift(image_dft) # Centralize
+  image_dft_scaling = scaling(np.log(1 + np.abs(image_dft_shift))) # 1 for avoid ln(0)
+  save_image(image_dft_scaling, 'dft-spectrum.png')
 
-  # # IDFT
-  # save_image(dft2d(image_dft, -1).real, 'idft-dft.png')
+  # IDFT
+  save_image(dft2d(image_dft, -1).real, 'idft-dft.png')
 
   ## Filter
   # Smooth with 7x7
@@ -63,6 +58,15 @@ def main():
 
   image_plus_sharp = filter2d_freq(image, laplacian + origin)
   save_image(image_plus_sharp, 'origin-with-edge.png')
+
+  # FFT
+  image_fft = fft2d(image, 1)
+  image_fft_shift = shift(image_fft)
+  image_fft_scaling = scaling(np.log(1 + np.abs(image_fft_shift)))
+  save_image(image_fft_scaling, 'fft-spectrum.png')
+
+  # IFFT
+  save_image(dft2d(image_fft, -1).real, 'ifft-fft.png')
 
 if __name__ == '__main__':
   main()

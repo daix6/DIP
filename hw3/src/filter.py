@@ -1,7 +1,8 @@
 #!/usr/env/bin python
 # -*- coding: utf-8 -*-
 
-from dft2d import *
+from utils import *
+from dft2d import dft, idft
 
 smooth = np.full((7, 7), 1.0/ (7 * 7))
 

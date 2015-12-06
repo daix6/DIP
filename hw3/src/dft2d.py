@@ -1,19 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy as np
-from PIL import Image
-
-def dfting(func):
-  ''' Decorator providing info
-  '''
-  def wrapper(*args, **kwargs):
-    print 'Begin to 2d Discrete Fourier Transform.'
-    data = func(*args, **kwargs)
-    print 'Finish 2d Discrete Fourier Transforming.\n'
-
-    return data
-  return wrapper
+from utils import *
 
 def matrix(n, flags):
   ''' The dft matrix with size n x n.
@@ -36,6 +24,13 @@ def idft(data):
   M, N = data.shape # M for rows' length, N for col length
   return np.asarray((matrix(M, -1) * data * matrix(N, -1))/ (M * N))
 
+def dft1d(data, flags):
+  if not flags in [1, -1]:
+    raise Exception("Wrong flags, it should be 1 or -1.")
+
+  return (matrix(len(data), flags) * data[:, np.newaxis]).A1 if flags == 1 \
+    else (matrix(len(data), flags) * data[:, np.newaxis] / len(data)).A1
+
 @dfting
 def dft2d(input_img, flags):
   ''' Discrete fourier transform, returns a 2d matrix
@@ -52,23 +47,3 @@ def dft2d(input_img, flags):
 
   data = np.reshape(input_img.getdata(), input_img.size[::-1])
   return dft(data) if flags == 1 else idft(data)
-
-
-def shift(data):
-  ''' Shift the result of dft to centralize the frequency spectrum.
-  data: an 2d matrix
-  '''
-  shape = data.shape
-  for axis, size in enumerate(shape):
-    mid = (size + 1) / 2
-    opposite = np.concatenate((np.arange(mid, size), np.arange(mid)))
-    data = np.take(data, opposite, axis=axis)
-  return data
-
-def scaling(data, L=256):
-  ''' Scaling the data to [0, L)
-  data: an 2d matrix
-  '''
-  positive = data - np.min(data) # negative to positive
-  intensity = (L - 1) * (positive / np.max(positive)) # minify to [0, L-1]
-  return np.uint8(intensity) # to int
