@@ -1,6 +1,8 @@
 #!/usr/env/bin python
 # -*- coding: utf-8 -*-
 
+# Reference: http://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/
+
 from utils import *
 from dft2d import dft1d
 
@@ -12,7 +14,8 @@ def fft1d(data, flags):
   else:
     even = fft1d(data[::2], flags)
     odd = fft1d(data[1::2], flags)
-    factor = np.exp(-2j * np.pi * np.arange(N)) if flags == 1 else np.exp(-2j * np.pi * np.arange(N) / N)
+    factor = np.exp(-2j * np.pi * np.arange(N)) if flags == 1 \
+        else np.exp(-2j * np.pi * np.arange(N) / N)
     return np.concatenate((even + factor[:N / 2] * odd,
                           even + factor[N / 2:] * odd))
 
