@@ -3,7 +3,9 @@
 
 import os, argparse
 from utils import *
+
 from filter2d import *
+from noise import *
 
 def main():
   # Arguments
@@ -15,7 +17,7 @@ def main():
   # Path
   file_dir = os.path.dirname(os.path.realpath(__file__))
   parent_dir = os.path.split(file_dir)[0]
-  dist_dir = os.path.join(parent_dir, 'dist')
+  dist_dir = os.path.join(parent_dir, 'dist', 'task_%d' % args.t)
 
   if args.t == 1:
     filename = os.path.join(parent_dir, 'assets', 'task_1.png')
@@ -28,44 +30,46 @@ def main():
     raise Exception("There is no file named " + filename + ".")
 
   if not os.path.exists(dist_dir):
-    raise Exception("There is no folder named " + dist_dir + ".")
+    os.makedirs(dist_dir)
 
   # Helper
   @saving
-  def save_image(data, name, dist=dist_dir):
-    ''' Save image as dist/name.
-    data: A 2d matrix
-    '''
-    if len(data.shape) != 2:
-      raise Exception("Wrong data when saving file")
+  def save_image(data, mode, name, dist=dist_dir):
 
-    Image.fromarray(data).convert('L').save(os.path.join(dist, name))
+    if mode == 'L':
+      Image.fromarray(data).convert(mode).save(os.path.join(dist, name))
+    elif mode in 'RGBA':
+      merged = [Image.fromarray(channel).convert('L') for channel in data]
+      Image.merge(mode, merged).save(os.path.join(dist, name))
+    else:
+      raise Exception('Invalid image mode %s.' % mode)
 
   if args.t == 1:
     # 2-1 filter
-    task_1 = open_image(filename)
-    task_1_arithmetic_mean_3x3 = arithmetic_mean_filter(task_1, (3,3))
-    save_image(task_1_arithmetic_mean_3x3, 'arithmetic_mean_3x3.png')
+    task_1, mode = open_image(filename)
 
-    task_1_arithmetic_mean_9x9 = arithmetic_mean_filter(task_1, (9,9))
-    save_image(task_1_arithmetic_mean_9x9, 'arithmetic_mean_9x9.png')
+    sizes = [(3,3), (9,9)]
+    # 2-1-1
+    for s in sizes:
+      r = arithmetic_mean_filter(task_1, s)
+      save_image(r, mode, 'arithmetic_mean_%dx%d.png' % s)
 
-    task_1_harmonic_mean_3x3 = harmonic_mean_filter(task_1, (3,3))
-    save_image(task_1_harmonic_mean_3x3, 'task_1_harmonic_mean_3x3.png')
+    # 2-1-2
+    for s in sizes:
+      r = harmonic_mean_filter(task_1, s)
+      save_image(r, mode, 'harmonic_mean_%dx%d.png' % s)
 
-    task_1_harmonic_mean_9x9 = harmonic_mean_filter(task_1, (9,9))
-    save_image(task_1_harmonic_mean_9x9, 'task_1_harmonic_mean_9x9.png')
-
-    task_1_contra_harmonic_mean_3x3 = contra_harmonic_mean_filter(task_1, (3,3), -1.5)
-    save_image(task_1_contra_harmonic_mean_3x3, 'task_1_contra_harmonic_mean_3x3.png')
-
-    task_1_contra_harmonic_mean_9x9 = contra_harmonic_mean_filter(task_1, (9,9), -1.5)
-    save_image(task_1_contra_harmonic_mean_9x9, 'task_1_contra_harmonic_mean_9x9.png')
+    # 2-1-3
+    for s in sizes:
+      r = contra_harmonic_mean_filter(task_1, s, -1.5)
+      save_image(r, mode, 'contra_harmonic_mean_%dx%d.png' % s)
 
   elif args.t == 2:
-    task_2 = open_image(filename)
-    task_2_gauss = add_guassian(task_2, 0.0, 40.0)
-    save_image(task_2_gauss, 'task_2_guass_0_40.png')
+    task_2, mode = open_image(filename)
+
+    # 2-2-1
+    task_2_gauss = add_gaussian(task_2, 0.0, 40.0)
+    save_image(task_2_gauss, mode, 'task_2_guass_0_40.png')
 
 if __name__ == '__main__':
   main()

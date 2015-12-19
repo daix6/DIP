@@ -5,6 +5,8 @@
 #      http://www.design.caltech.edu/erik/Misc/Gaussian.html
 #      https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
 
+from utils import *
+
 class GaussianGenerator(object):
   def __init__(self, mu, sigma):
     self.generate = True
@@ -13,7 +15,7 @@ class GaussianGenerator(object):
     self.cache = None
 
   def generator(self):
-    if (!self.generate)
+    if (not self.generate):
       self.generate = not self.generate
       return self.cache * self.sigma + self.mu
 
@@ -31,7 +33,7 @@ class GaussianGenerator(object):
     return z * self.sigma + self.mu
 
   def generator_polar(self):
-    if (!self.generate)
+    if (not self.generate):
       self.generate = not self.generate
       return self.cache * self.sigma + self.mu
 

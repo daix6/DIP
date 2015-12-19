@@ -15,5 +15,16 @@ def saving(func):
 # Helper
 def open_image(path):
   image = Image.open(path)
-  image_data = np.array(image.getdata(), dtype=np.float64).reshape(image.size[::-1])
+  return (image_to_array(image), image.mode)
+
+def image_to_array(image):
+  mode = image.mode
+
+  if mode == 'L':
+    image_data = np.array(image.getdata(), dtype=np.float64).reshape(image.size[::-1])
+  elif mode in 'RGBA':
+    image_data = [image_to_array(channel) for channel in image.split()]
+  else:
+    raise Exception('Can\'t hanldle the image type %s yet.' % mode)
+
   return image_data
