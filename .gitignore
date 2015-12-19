@@ -15,8 +15,6 @@ hw*/assets/**/*
 !**/doc/*.tex
 !**/doc/*.png
 
-
-
 ## JS
 
 node_modules/

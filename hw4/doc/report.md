@@ -173,9 +173,11 @@ $$ \hat{f}(x,y) = \frac{\sum_{(s,t) \in S_{xy}} g(s,t)^{Q+1}}{\sum_{(s,t) \in S_
   ![](../dist/task_3/equalize_seperate.png)
   Histogram Equalization Seperately
   ![](../dist/task_3/equalize_together.png)
-  Histogram Equalization Average
+  Histogram Equalization Together
 </center>
 
 #### 2.3.2 Discussion
 
-#### 2.3.3 Algorithm
+分别对不同分量进行直方图均衡化再合并的结果的对比度与饱和度相对原图都增大了，有一种老旧的感觉。分别对不同分量处理，这导致不同分量的像素值的改变都是各行其道，与原本的颜色的差异相对会更大，导致图片的不协调。  
+
+而对合并不同分量处理的结果看上去相对更符合审美一些。因为是整体的直方图均衡都，不同分量的相同像素值改变都是一样的，在提升图片质量的同时，不会与原本的颜色产生较大差别。
