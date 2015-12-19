@@ -33,7 +33,6 @@ def main():
   if not os.path.exists(dist_dir):
     os.makedirs(dist_dir)
 
-  # Helper
   @saving
   def save_image(data, name, mode='L', dist=dist_dir):
 
@@ -47,6 +46,7 @@ def main():
 
   if args.t == 1:
     # 2-1 filter
+    print 'Task 1:'
     task_1, mode = open_image(filename)
 
     sizes = [(3,3), (9,9)]
@@ -66,6 +66,7 @@ def main():
       save_image(r, 'contra_harmonic_mean_%dx%d.png' % s, mode)
 
   elif args.t == 2:
+    print 'Task 2:'
     task_2, mode = open_image(filename)
 
     # 2-2-2
@@ -109,18 +110,14 @@ def main():
       save_image(r, 'salt_pepper_%s.png' % s[1], mode)
   
   elif args.t == 3:
+    print 'Task 3:'
     task_3, mode = open_image(filename)
 
     equalize_seperate = equalize_hist(task_3, mode=mode)
     save_image(equalize_seperate, 'equalize_seperate.png', mode)
 
-    print task_3 - np.array(equalize_seperate)
-
     equalize_together = equalize_hist(task_3, way='together')
     save_image(equalize_together, 'equalize_together.png', mode)
-
-    print equalize_together
-    print task_3 - np.array(equalize_together)
 
 if __name__ == '__main__':
   main()

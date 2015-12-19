@@ -1,4 +1,4 @@
-## HW3 of DIP
+## HW4 of DIP
 
 * Find codes in src/
 * Find report in doc/
@@ -9,16 +9,24 @@
 * python 2.7.*
 * pillow
 * numpy
-* matplotlib
 
 ## How to Run
 
 ```bash
-  # in src run
-  python main.py -s image.png
-  # dist should exists
-  # image.png means ../assets/image.png
+  # Run task 1
+  python main.py -t 1
 
+  # Run task 2
+  python main.py -t 2
+
+  # Run task 3, where image.png means the filename in assets/task_3 folder.
+  # If not specified the source, it defaults to be '43.png'
+  python main.py -t 3 -s image.png
+
+  # Or simply run this only
+  bash run.sh
+
+  # It may take about 10 minutes to get all results...
 ```
 
 ## Author
