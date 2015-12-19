@@ -6,6 +6,7 @@ from utils import *
 
 from filter2d import *
 from noise import *
+from histogram import *
 
 def main():
   # Arguments
@@ -106,6 +107,20 @@ def main():
     for s in stats:
       r = statistic_filter(salt_pepper, (3,3), s[0], mode)
       save_image(r, 'salt_pepper_%s.png' % s[1], mode)
+  
+  elif args.t == 3:
+    task_3, mode = open_image(filename)
+
+    equalize_seperate = equalize_hist(task_3, mode=mode)
+    save_image(equalize_seperate, 'equalize_seperate.png', mode)
+
+    print task_3 - np.array(equalize_seperate)
+
+    equalize_together = equalize_hist(task_3, way='together')
+    save_image(equalize_together, 'equalize_together.png', mode)
+
+    print equalize_together
+    print task_3 - np.array(equalize_together)
 
 if __name__ == '__main__':
   main()
