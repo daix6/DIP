@@ -16,7 +16,7 @@ hw*/assets/*
 ## JS
 
 node_modules/
-dist/
+tryJS/dist/
 
 ## ...
 
