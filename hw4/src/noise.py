@@ -51,11 +51,46 @@ class GaussianGenerator(object):
 
     return z
 
+class SaltPepperGenerator(object):
+  def __init__(self, level, ps, pp):
+    self.level = level
+    self.ps = ps
+    self.pp = pp
+
+  def salt(self, origin):
+    return self.level - 1 if np.random.random_sample() < self.ps else origin
+
+  def pepper(self, origin):
+    return 0 if np.random.random_sample() < self.pp else origin
+
+  def sp(self, origin):
+    rs = np.random.random_sample()
+
+    if rs < self.ps:
+      return self.level - 1
+    elif rs > (1 - self.pp):
+      return 0
+    else:
+      return origin
+
+  def generator(self, origin):
+    return self.sp(origin)
+          
+
 def add_gaussian(data, mu, sigma):
   generator = GaussianGenerator(mu, sigma)
 
   def add_noise(p):
     return p + generator.generator()
+
+  vfunc = np.vectorize(add_noise)
+  return vfunc(data)
+
+def add_salt_pepper(data, level=256, ps=0.0, pp=0.0):
+  generator = SaltPepperGenerator(level, ps, pp)
+
+  def add_noise(p):
+    return generator.generator(p)
 
   vfunc = np.vectorize(add_noise)
   return vfunc(data)

@@ -80,5 +80,32 @@ def main():
     gauss_median = statistic_filter(gauss, (3,3), 50, mode)
     save_image(gauss_median, 'gauss_median.png', mode)
 
+    # 2-2-3
+    salt = add_salt_pepper(task_2, ps=0.2)
+    save_image(salt, 'salt_0.2.png', mode)
+
+    salt_harmonic = harmonic_mean_filter(salt, (3,3), mode)
+    save_image(salt_harmonic, 'salt_harmonic.png', mode)
+
+    salt_contra_positive = contra_harmonic_mean_filter(salt, (3,3), 1.5, mode)
+    save_image(salt_contra_positive, 'salt_contra_harmonic_1.5.png', mode)
+
+    salt_contra_negative = contra_harmonic_mean_filter(salt, (3,3), -1.5, mode)
+    save_image(salt_contra_negative, 'salt_contra_harmonic_-1.5.png', mode)
+
+    salt_pepper = add_salt_pepper(task_2, ps=0.2, pp=0.2)
+    save_image(salt_pepper, 'salt_0.2_pepper_0.2.png', mode)
+
+    salt_pepper_arithmetic = arithmetic_mean_filter(salt_pepper, (3,3), mode)
+    save_image(salt_pepper_arithmetic, 'salt_pepper_arithmetic.png', mode)
+
+    salt_pepper_geometric = geometric_mean_filter(salt_pepper, (3,3), mode)
+    save_image(salt_pepper_geometric, 'salt_pepper_geometric.png', mode)
+
+    stats = [(100, 'max'), (0, 'min'), (50, 'median')]
+    for s in stats:
+      r = statistic_filter(salt_pepper, (3,3), s[0], mode)
+      save_image(r, 'salt_pepper_%s.png' % s[1], mode)
+
 if __name__ == '__main__':
   main()
