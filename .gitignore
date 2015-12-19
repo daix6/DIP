@@ -12,6 +12,10 @@ hw*/assets/**/*
 
 **/doc/*
 !**/doc/*.md
+!**/doc/*.tex
+!**/doc/*.png
+
+
 
 ## JS
 

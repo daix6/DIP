@@ -1,0 +1,133 @@
+\documentclass{article}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\algnewcommand{\LineComment}[1]{\State \(\triangleright\) #1}
+
+\begin{document}
+  \begin{algorithm}
+    \caption{Gauss Noise Generator}
+    \label{GaussGenerator}
+    \begin{algorithmic}[1]
+      \Function{Gauss}{$\mu$, $\sigma$}
+      \State $cache$ = $!cache$ \Comment {$cache$ should be static}
+      \If{$cache$}
+      \State \Return $\mu + \sigma * z1$ \Comment {Use the already caculated number.}
+      \EndIf
+      \\
+      \State $u, v$ = two random number having uniform distribution in [0,1)
+      \State $z0$ = $\sqrt{-2ln(u)}cos(2\pi v)$
+      \State $z1$ = $\sqrt{-2ln(u)}sin(2\pi v)$
+      \State \Return $\mu + \sigma * z0$
+      \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+  \begin{algorithm}
+    \caption{Salt And Pepper Noise Generator}
+    \label{SaltPepperGenerator}
+    \begin{algorithmic}[1]
+      \Function{SaltAndPepper}{$level$ = 256, $ps$ = 0.0, $pp$ = 0.0, $origin$}
+      \LineComment {$ps$} the probability of salt
+      \LineComment {$pp$} the probablity of pepper
+      \LineComment {$origin$} the origin value
+      \State $rs$ = a random number between [0, 1)
+      \If{$rs$ $\textless$ $ps$}
+      \State \Return $level$ - 1
+      \ElsIf{$rs$ $\textgreater$ (1 - $pp$)}
+      \State \Return 0
+      \Else
+      \State \Return origin
+      \EndIf
+      \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+
+  \begin{algorithm}
+    \caption{Arithmetic Mean Filter}
+    \label{Arithmetic}
+    \begin{algorithmic}[1]
+    \Function{Arithmetic}{$data$, $size$}
+    \State $m,n$ = size
+    \State $filter$ = an mxn matrix with elements equals to $\frac{1}{m\times n}$
+    \State \Return \Call{filter2d}{$data$, $filter$}
+    \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+  \begin{algorithm}
+    \caption{Geometric Mean Filter}
+    \label{Geometric}
+    \begin{algorithmic}[1]
+    \Function{Geometric}{$data$, $size$}
+    \State $M, N$ = $data$'s height, width
+    \State $m, n$ = size
+    \For{each $(x,y)$ in $data$}
+    \State $neighbors$ = get $m\times n$ neighbors of $(x,y)$
+    \State $neighbors^{\frac{1}{m\times n}}$ element-wise
+    \State $r$ = product of elements in $neighbors$
+    \State put $r$ to $(x,y)$ in $\mathbf{result}$
+    \EndFor
+    \State \Return $result$
+    \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+  \begin{algorithm}
+    \caption{Statistic Filter}
+    \label{Statistic}
+    \begin{algorithmic}[1]
+    \Function{Statistic}{$data$, $size$, $percent$}
+    \LineComment $percent$ = 0, min filter
+    \LineComment $percent$ = 50, median filter
+    \LineComment $percent$ = 100, max filter
+    \For{each $(x,y)$ in $data$}
+    \State $neighbors$ = get neighbors of $(x,y)$ within $size$ if exists
+    \State sort $neighbors$
+    \State $index$ = $\frac{percent}{100}\times($\Call{LENGTH}{$neighbors$}$-1)$
+    \State $i\_below, i\_above$ = \Call{Floor}{index}, \Call{Ceil}{index}
+    \State $r$ = $(neighbors[i\_below] + neighbors[i\_above]) / 2$
+    \State put $r$ to $(x,y)$ in $\mathbf{result}$
+    \EndFor
+    \State \Return $result$
+    \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+  \newpage
+
+  \begin{algorithm}
+    \caption{Harmonic Filter}
+    \label{Harmonic}
+    \begin{algorithmic}[1]
+    \Function{Harmonic}{$data$, $size$}
+    \State $reciprocal$ = get reciprocal of $data$ element-wise
+    \State $denominator$ = \Call{Arithmetic}{$reciprocal$, $size$}
+    \State \Return the reciprocal of $denominator$ element-wise
+    \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+  \begin{algorithm}
+    \caption{Contraharmonic Filter}
+    \label{Contraharmonic}
+    \begin{algorithmic}[1]
+    \Function{Contraharmonic}{$data$, $size$, $q$}
+    \State $m,n$ = $size$
+    \State $numerator$ = $data^{q+1}$ element-wise
+    \State $denominator$ = $data^{q}$ element-wise
+    \State $filter$ = an mxn matrix with elements equals to $1$
+    \State \Return $\frac{\Call{Arithmetic}{numerator}}{\Call{Arithmetic}{denominator}}$ element-wise
+    \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+  % \begin{algorithm}
+  %   \caption{}
+  %   \label{}
+  %   \begin{algorithmic}[1]
+  %   \end{algorithmic}
+  % \end{algorithm}
+\end{document}

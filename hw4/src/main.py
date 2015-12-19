@@ -71,10 +71,10 @@ def main():
 
     # 2-2-2
     gauss = add_gaussian(task_2, 0.0, 40.0)
-    save_image(gauss, 'guass_0_40.png', mode)
+    save_image(gauss, 'gauss_0_40.png', mode)
 
     gauss_amf = arithmetic_mean_filter(gauss, (3,3), mode)
-    save_image(gauss_amf, 'guass_arithmetic.png', mode)
+    save_image(gauss_amf, 'gauss_arithmetic.png', mode)
 
     gauss_gmf = geometric_mean_filter(gauss, (3,3), mode)
     save_image(gauss_gmf, 'gauss_geometric.png', mode)

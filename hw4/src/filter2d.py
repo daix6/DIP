@@ -3,7 +3,7 @@
 
 from utils import *
 
-def filter2d(data, filter, geometric=False):
+def filter2d(data, filter):
     '''
     data: 2d pixel matrix
     filter: 2d matrix or array or something else
