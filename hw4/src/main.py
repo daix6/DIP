@@ -10,7 +10,7 @@ from noise import *
 def main():
   # Arguments
   parser = argparse.ArgumentParser()
-  parser.add_argument('-t', type=int, choices=[1,2,3], help='The task you want to run: 1, 2 or 3.')
+  parser.add_argument('-t', type=int, choices=[1,2,3], required=True, help='The task you want to run: 1, 2 or 3.')
   parser.add_argument('-s', type=str, default='43.png', help='The path of the image that you want to deal with.')
   args = parser.parse_args()
 
@@ -34,7 +34,7 @@ def main():
 
   # Helper
   @saving
-  def save_image(data, mode, name, dist=dist_dir):
+  def save_image(data, name, mode='L', dist=dist_dir):
 
     if mode == 'L':
       Image.fromarray(data).convert(mode).save(os.path.join(dist, name))
@@ -52,24 +52,33 @@ def main():
     # 2-1-1
     for s in sizes:
       r = arithmetic_mean_filter(task_1, s)
-      save_image(r, mode, 'arithmetic_mean_%dx%d.png' % s)
+      save_image(r, 'arithmetic_mean_%dx%d.png' % s, mode)
 
     # 2-1-2
     for s in sizes:
       r = harmonic_mean_filter(task_1, s)
-      save_image(r, mode, 'harmonic_mean_%dx%d.png' % s)
+      save_image(r, 'harmonic_mean_%dx%d.png' % s, mode)
 
     # 2-1-3
     for s in sizes:
       r = contra_harmonic_mean_filter(task_1, s, -1.5)
-      save_image(r, mode, 'contra_harmonic_mean_%dx%d.png' % s)
+      save_image(r, 'contra_harmonic_mean_%dx%d.png' % s, mode)
 
   elif args.t == 2:
     task_2, mode = open_image(filename)
 
-    # 2-2-1
-    task_2_gauss = add_gaussian(task_2, 0.0, 40.0)
-    save_image(task_2_gauss, mode, 'task_2_guass_0_40.png')
+    # 2-2-2
+    gauss = add_gaussian(task_2, 0.0, 40.0)
+    save_image(gauss, 'guass_0_40.png', mode)
+
+    gauss_amf = arithmetic_mean_filter(gauss, (3,3), mode)
+    save_image(gauss_amf, 'guass_arithmetic.png', mode)
+
+    gauss_gmf = geometric_mean_filter(gauss, (3,3), mode)
+    save_image(gauss_gmf, 'gauss_geometric.png', mode)
+
+    gauss_median = statistic_filter(gauss, (3,3), 50, mode)
+    save_image(gauss_median, 'gauss_median.png', mode)
 
 if __name__ == '__main__':
   main()

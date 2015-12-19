@@ -5,7 +5,7 @@ basic/
 
 ## report
 
-hw*/assets/*
+hw*/assets/**/*
 !hw*/assets/43.png
 !hw4/assets/task_*.png
 !hw4/assets/task_3/43.png
