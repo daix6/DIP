@@ -77,20 +77,32 @@ class SaltPepperGenerator(object):
     return self.sp(origin)
           
 
-def add_gaussian(data, mu, sigma):
+def add_gaussian(data, mu, sigma, mode='L'):
   generator = GaussianGenerator(mu, sigma)
 
   def add_noise(p):
     return p + generator.generator()
 
   vfunc = np.vectorize(add_noise)
+
+  if mode in 'RGBA':
+    rgb = vfunc(data[:3])
+    alpha = data[3] if len('RGBA') == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
+
   return vfunc(data)
 
-def add_salt_pepper(data, level=256, ps=0.0, pp=0.0):
+def add_salt_pepper(data, level=256, ps=0.0, pp=0.0, mode='L'):
   generator = SaltPepperGenerator(level, ps, pp)
 
   def add_noise(p):
     return generator.generator(p)
 
   vfunc = np.vectorize(add_noise)
+
+  if mode in 'RGBA':
+    rgb = vfunc(data[:3])
+    alpha = data[3] if len('RGBA') == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
+
   return vfunc(data)

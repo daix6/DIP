@@ -6,6 +6,31 @@
 \algnewcommand{\LineComment}[1]{\State \(\triangleright\) #1}
 
 \begin{document}
+
+  \begin{algorithm}
+    \caption{Basic Rule in Handling RGBA Image}
+    \label{RGB}
+    \begin{algorithmic}[1]
+      \Function{RGBA}{$Function$, $data$, $args$, $mode$}
+      \LineComment apply $Function$ to $data$ with $args$
+      \If{$mode$ in $'RGBA'$} \Comment RGBA
+      \LineComment $data$ will look like $[R,G,B]$ or $[R,G,B,A]$ 
+      \\ 
+      \State $rgb$ = \Call{$Function$}{$data[:3]$, $args$, $mode$='L'} \Comment $L$ means 1-d
+        \If{\Call{Length}{mode} == 4}
+        \State $alpha$ = $data[3]$
+        \State \Return \Call{Concatenate}{$rgb$, $alpha$}
+        \Else
+        \State \Return $rgb$
+        \EndIf
+      \EndIf
+      \State \Return \Call{$Function$}{$data$, $args$} \Comment not RGBA
+      \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+  \newpage
+
   \begin{algorithm}
     \caption{Gauss Noise Generator}
     \label{GaussGenerator}
@@ -44,6 +69,7 @@
     \end{algorithmic}
   \end{algorithm}
 
+  \newpage
 
   \begin{algorithm}
     \caption{Arithmetic Mean Filter}
@@ -75,27 +101,6 @@
     \end{algorithmic}
   \end{algorithm}
 
-  \begin{algorithm}
-    \caption{Statistic Filter}
-    \label{Statistic}
-    \begin{algorithmic}[1]
-    \Function{Statistic}{$data$, $size$, $percent$}
-    \LineComment $percent$ = 0, min filter
-    \LineComment $percent$ = 50, median filter
-    \LineComment $percent$ = 100, max filter
-    \For{each $(x,y)$ in $data$}
-    \State $neighbors$ = get neighbors of $(x,y)$ within $size$ if exists
-    \State sort $neighbors$
-    \State $index$ = $\frac{percent}{100}\times($\Call{LENGTH}{$neighbors$}$-1)$
-    \State $i\_below, i\_above$ = \Call{Floor}{index}, \Call{Ceil}{index}
-    \State $r$ = $(neighbors[i\_below] + neighbors[i\_above]) / 2$
-    \State put $r$ to $(x,y)$ in $\mathbf{result}$
-    \EndFor
-    \State \Return $result$
-    \EndFunction
-    \end{algorithmic}
-  \end{algorithm}
-
   \newpage
 
   \begin{algorithm}
@@ -120,6 +125,27 @@
     \State $denominator$ = $data^{q}$ element-wise
     \State $filter$ = an mxn matrix with elements equals to $1$
     \State \Return $\frac{\Call{Arithmetic}{numerator}}{\Call{Arithmetic}{denominator}}$ element-wise
+    \EndFunction
+    \end{algorithmic}
+  \end{algorithm}
+
+  \begin{algorithm}
+    \caption{Statistic Filter}
+    \label{Statistic}
+    \begin{algorithmic}[1]
+    \Function{Statistic}{$data$, $size$, $percent$}
+    \LineComment $percent$ = 0, min filter
+    \LineComment $percent$ = 50, median filter
+    \LineComment $percent$ = 100, max filter
+    \For{each $(x,y)$ in $data$}
+    \State $neighbors$ = get neighbors of $(x,y)$ within $size$ if exists
+    \State sort $neighbors$
+    \State $index$ = $\frac{percent}{100}\times($\Call{LENGTH}{$neighbors$}$-1)$
+    \State $i\_below, i\_above$ = \Call{Floor}{index}, \Call{Ceil}{index}
+    \State $r$ = $(neighbors[i\_below] + neighbors[i\_above]) / 2$
+    \State put $r$ to $(x,y)$ in $\mathbf{result}$
+    \EndFor
+    \State \Return $result$
     \EndFunction
     \end{algorithmic}
   \end{algorithm}

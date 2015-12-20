@@ -30,7 +30,9 @@ def filter2d(data, filter):
 
 def arithmetic_mean_filter(data, size, mode='L'):
   if mode in 'RGBA':
-    return [arithmetic_mean_filter(channel, size) for channel in data]
+    rgb = [arithmetic_mean_filter(channel, size) for channel in data[:3]]
+    alpha = data[3] if len(mode) == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
 
   m, n = size
   filter = np.full(size, float(1) / (m * n))
@@ -39,7 +41,9 @@ def arithmetic_mean_filter(data, size, mode='L'):
 
 def harmonic_mean_filter(data, size, mode='L'):
   if mode in 'RGBA':
-    return [harmonic_mean_filter(channel, size) for channel in data]
+    rgb = [harmonic_mean_filter(channel, size) for channel in data[:3]]
+    alpha = data[3] if len(mode) == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
 
   reciprocal = np.reciprocal(data)
   result = np.reciprocal(arithmetic_mean_filter(reciprocal, size))
@@ -48,7 +52,9 @@ def harmonic_mean_filter(data, size, mode='L'):
 
 def contra_harmonic_mean_filter(data, size, q, mode='L'):
   if mode in 'RGBA':
-    return [contra_harmonic_mean_filter(channel, size, q) for channel in data]
+    rgb = [contra_harmonic_mean_filter(channel, size, q) for channel in data[:3]]
+    alpha = data[3] if len(mode) == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
 
   numerator = np.power(data, q+1)
   denominator = np.power(data, q)
@@ -59,7 +65,9 @@ def contra_harmonic_mean_filter(data, size, q, mode='L'):
 
 def geometric_mean_filter(data, size, mode='L'):
   if mode in 'RGBA':
-    return [geometric_mean_filter(channel, size) for channel in data]
+    rgb = [geometric_mean_filter(channel, size) for channel in data[:3]]
+    alpha = data[3] if len(mode) == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
 
   M, N = data.shape
   m, n = size
@@ -83,7 +91,9 @@ def statistic_filter(data, size, percent, mode='L'):
     return ValueError('Wrong percent, it should between [0, 100]')
 
   if mode in 'RGBA':
-    return [statistic_filter(channel, size, percent) for channel in data]
+    rgb = [statistic_filter(channel, size, percent) for channel in data[:3]]
+    alpha = data[3] if len(mode) == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
 
   M, N = data.shape
   m, n = size
@@ -100,7 +110,6 @@ def statistic_filter(data, size, percent, mode='L'):
     neighbors.sort()
     index = percent / 100.0 * (len(neighbors) - 1)
     index_below, index_above = int(np.floor(index)), int(np.ceil(index))
-
     return (neighbors[index_below] + neighbors[index_above]) / 2.0
 
   w, h = np.meshgrid(range(M), range(N), indexing='ij')

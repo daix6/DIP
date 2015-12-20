@@ -69,8 +69,8 @@ def main():
     print 'Task 2:'
     task_2, mode = open_image(filename)
 
-    # 2-2-2
-    gauss = add_gaussian(task_2, 0.0, 40.0)
+    # # 2-2-2
+    gauss = add_gaussian(task_2, 0.0, 40.0, mode=mode)
     save_image(gauss, 'gauss_0_40.png', mode)
 
     gauss_amf = arithmetic_mean_filter(gauss, (3,3), mode)
@@ -83,7 +83,7 @@ def main():
     save_image(gauss_median, 'gauss_median.png', mode)
 
     # 2-2-3
-    salt = add_salt_pepper(task_2, ps=0.2)
+    salt = add_salt_pepper(task_2, ps=0.2, mode=mode)
     save_image(salt, 'salt_0.2.png', mode)
 
     salt_harmonic = harmonic_mean_filter(salt, (3,3), mode)
@@ -95,7 +95,7 @@ def main():
     salt_contra_negative = contra_harmonic_mean_filter(salt, (3,3), -1.5, mode)
     save_image(salt_contra_negative, 'salt_contra_harmonic_-1.5.png', mode)
 
-    salt_pepper = add_salt_pepper(task_2, ps=0.2, pp=0.2)
+    salt_pepper = add_salt_pepper(task_2, ps=0.2, pp=0.2, mode=mode)
     save_image(salt_pepper, 'salt_0.2_pepper_0.2.png', mode)
 
     salt_pepper_arithmetic = arithmetic_mean_filter(salt_pepper, (3,3), mode)
@@ -108,7 +108,7 @@ def main():
     for s in stats:
       r = statistic_filter(salt_pepper, (3,3), s[0], mode)
       save_image(r, 'salt_pepper_%s.png' % s[1], mode)
-  
+
   elif args.t == 3:
     print 'Task 3:'
     task_3, mode = open_image(filename)
@@ -116,7 +116,7 @@ def main():
     equalize_seperate = equalize_hist(task_3, mode=mode)
     save_image(equalize_seperate, 'equalize_seperate.png', mode)
 
-    equalize_together = equalize_hist(task_3, way='together')
+    equalize_together = equalize_hist(task_3, mode=mode, way='together')
     save_image(equalize_together, 'equalize_together.png', mode)
 
 if __name__ == '__main__':

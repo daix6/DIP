@@ -6,7 +6,9 @@ from utils import *
 
 def equalize(data, level=256, mode='L'):
   if mode in 'RGBA':
-    return [equalize(channel) for channel in data]
+    rgb = [equalize(channel) for channel in data[:3]]
+    alpha = data[3] if len(mode) == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
 
   size = data.shape[0] * data.shape[1]
   # http://stackoverflow.com/questions/10741346/numpy-most-efficient-frequency-counts-for-unique-values-in-an-array
@@ -20,10 +22,14 @@ def equalize(data, level=256, mode='L'):
 
   return [round(float(i) * (level - 1)) for i in cdf]
 
-def equalize_together(data, level=256):
-  ''' RGB or RGBA
+def equalize_together(data, level=256, mode='RGB'):
   '''
-  vector = np.dstack(data)
+  Only handle 'RGB' or 'RGBA', ignore Alpha channel.
+  '''
+  if not mode in 'RGBA':
+    raise Exception('Wrong data.')
+
+  vector = np.dstack(data[:3])
   size = vector.shape[0] * vector.shape[1] * vector.shape[2]
 
   color, count = np.unique(vector, return_counts=True)
@@ -39,12 +45,15 @@ def equalize_hist(data, level=256, mode='L', way='seperate'):
     raise Exception('Wrong way to caculate histogram')
 
   if way == 'together':
-    lookup = equalize_together(data, level)
-  else:
-    lookup = equalize(data, level, mode)
+    lookup = equalize_together(data, level, mode)
+    return replace(data, lookup)
+
+  lookup = equalize(data, level, mode)
 
   if mode in 'RGBA':
-    return [replace(d, l) for (d, l) in zip(data, lookup)]
+    rgb = [replace(d, l) for (d, l) in zip(data[:3], lookup)]
+    alpha = data[3] if len(mode) == 4 else np.array([])
+    return np.concatenate((rgb, [alpha])) if alpha.size else rgb
 
   return replace(data, lookup)
 
