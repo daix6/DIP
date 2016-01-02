@@ -15,6 +15,11 @@ hw*/assets/**/*
 !**/doc/*.tex
 !**/doc/*.png
 
+## Project
+
+*.class
+Stereo_Matching/assets/**/*
+
 ## JS
 
 node_modules/
