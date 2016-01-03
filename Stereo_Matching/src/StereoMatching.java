@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 
 public class StereoMatching {
@@ -27,6 +28,8 @@ public class StereoMatching {
     this.disp_l = new BufferedImage(N, M, BufferedImage.TYPE_BYTE_GRAY);
     this.disp_r = new BufferedImage(N, M, BufferedImage.TYPE_BYTE_GRAY);
 
+    int[] ld = new int[M*N], rd = new int[M*N];
+    
     for (int i = 0; i < M; i++) {
       for (int j = 0; j < N; j++) {
         int[][] lp = getPatch(left, i, j);
@@ -43,7 +46,7 @@ public class StereoMatching {
             min_d = d;
           }
         }
-        this.disp_l.setRGB(j, i, min_d);
+        ld[i*N + j] = min_d;
 
         // For right eye image disparity map
         cost = Double.POSITIVE_INFINITY;
@@ -56,9 +59,12 @@ public class StereoMatching {
             min_d = d;
           }
         }
-        this.disp_r.setRGB(j, i, Utils.toRGB(min_d));
+        rd[i*N + j] = min_d;
       }
     }
+    
+    this.disp_l.getRaster().setPixels(0, 0, N, M, ld);
+    this.disp_r.getRaster().setPixels(0, 0, N, M, rd);
   }
 
   // Cost Evaluation
@@ -87,7 +93,6 @@ public class StereoMatching {
       int[] bad= new int[] {0,0};
       for (int i = 0; i < M; i++) {
         for (int j = 0; j < N; j++) {
-          System.out.println(l[i][j] + " " + bpL[i][j]);
           if (Math.abs(l[i][j] - bpL[i][j] / 3.0) > 1)
             bad[0]++;
           if (Math.abs(r[i][j] - bpR[i][j] / 3.0) > 1)

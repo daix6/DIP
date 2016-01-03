@@ -15,7 +15,7 @@ public class Test {
                 right = Utils.getImage(testcase, Utils.RIGHT),
                 benchmark_left = Utils.getImage(testcase, Utils.BENCHMARK_LEFT),
                 benchmark_right = Utils.getImage(testcase, Utils.BENCHMARK_RIGHT);
-        StereoMatching sm = new StereoMatching(left, right, 79, 5);
+        StereoMatching sm = new StereoMatching(left, right);
         sm.ssd();
         sm.evaluate(benchmark_left, benchmark_right);
         sm.printBad(testcase);

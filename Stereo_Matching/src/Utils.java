@@ -92,7 +92,7 @@ public class Utils {
   }
   
   public static int toRGB(int pixel) { 
-    return new Color(pixel, pixel, pixel).getRGB();
+    return pixel + (pixel << 8) + (pixel << 16) + (0xff << 24);
   }
 
   public static int[][] getPixels(BufferedImage image) {
