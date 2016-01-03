@@ -31,4 +31,7 @@ public class NCC implements MatchingCost {
 
     return 1 - cost / (M * N * std_l * std_r);
   }
+
+  // It should not be used.
+  public double matchingCost(int[][] left, int[][] right, int[][] leftLab, int[][] rightLab) {return 0;}
 }

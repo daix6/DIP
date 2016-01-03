@@ -167,4 +167,77 @@ public class Utils {
       e.printStackTrace();
     }
   }
+
+  public static int[][] rgb2lab(int[][] image) {
+    int M = image.length, N = image[0].length;
+    int[][] labs = new int[M][N];
+    for (int i = 0; i < M; i++) {
+      for (int j = 0; j < N; j++) {
+        int pixel = image[i][j];
+
+        double r, g, b, X, Y, Z, fx, fy, fz, xr, yr, zr;
+        double Ls, as, bs;
+        double eps = 216.f/24389.f;
+        double k = 24389.f/27.f;
+        
+        double Xr = 0.964221f,
+              Yr = 1.0f,
+              Zr = 0.825211f;
+        
+        // To [0,1]
+        r = (((int)pixel >> 16) & 0xff) / 255.f;
+        g = (((int)pixel >> 8) & 0xff) / 255.f;
+        b = (((int)pixel) & 0xff) / 255.f;
+
+        if (r < 0.04045)
+          r = r/12;
+        else
+          r = (double) Math.pow((r + 0.055)/1.055, 2.4);
+
+        if (g < 0.04045)
+            g = g/12;
+          else
+            g = (double) Math.pow((g + 0.055)/1.055, 2.4);
+ 
+        if (b < 0.04045)
+            b = r/12;
+          else
+            b = (double) Math.pow((b + 0.055)/1.055, 2.4);
+
+        // RGB TO XYZ
+        X =  0.436052025f * r + 0.385081593f * g + 0.143087414f * b;
+        Y =  0.222491598f * r + 0.71688606f  * g + 0.060621486f * b;
+        Z =  0.013929122f * r + 0.097097002f * g + 0.71418547f  * b;
+        
+        // XYZ TO LAB
+        xr = X/Xr;
+        yr = Y/Yr;
+        zr = Z/Zr;
+        
+        if (xr > eps)
+          fx = (double) Math.pow(xr, 1/3.);
+        else
+          fx = (double) ((k * xr + 16.) / 116.);
+
+        if (yr > eps)
+          fy = (double) Math.pow(yr, 1/3.);
+        else
+          fy = (double) ((k * yr + 16.) / 116.);
+        
+        if (zr > eps)
+            fz = (double) Math.pow(zr, 1/3.);
+          else
+            fz = (double) ((k * zr + 16.) / 116.);
+        
+        Ls = (116 * fy) - 16; // 0 ~ 1
+        as = 500 * (fx - fy); // -.5 ~ .5
+        bs = 200 * (fx - fz); // -.5 ~ .5
+        
+        // All scale to [0,255]
+        labs[i][j] = (int)(2.55*Ls + .5) << 16 + (int)(as + .5) << 8 + (int)(bs + .5);
+      }
+    }
+
+    return labs;
+  }
 }

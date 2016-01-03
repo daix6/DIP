@@ -9,4 +9,7 @@ public class SSD implements MatchingCost {
 
     return cost;
   }
+
+  // It should not be used.
+  public double matchingCost(int[][] left, int[][] right, int[][] leftLab, int[][] rightLab) {return 0;}
 }

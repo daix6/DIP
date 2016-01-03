@@ -1,6 +1,4 @@
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
 
 public class StereoMatching {
   public BufferedImage left, right;
@@ -40,9 +38,9 @@ public class StereoMatching {
         int min_d = 0;
         for (int d = 0; d < this.max_d; d++) {
           int[][] rp_d = getPatch(right, i, j - d);
-          double ssdcost = mc.matchingCost(lp, rp_d);
-          if (ssdcost < cost) {
-            cost = ssdcost;
+          double matchingCost = mc.matchingCost(lp, rp_d);
+          if (matchingCost < cost) {
+            cost = matchingCost;
             min_d = d;
           }
         }
@@ -53,9 +51,9 @@ public class StereoMatching {
         min_d = 0;
         for (int d = 0; d < this.max_d; d++) {
           int[][] lp_d = getPatch(left, i, j + d);
-          double ssdcost = mc.matchingCost(rp, lp_d);
-          if (ssdcost < cost) {
-            cost = ssdcost;
+          double matchingCost = mc.matchingCost(rp, lp_d);
+          if (matchingCost < cost) {
+            cost = matchingCost;
             min_d = d;
           }
         }
@@ -66,6 +64,58 @@ public class StereoMatching {
     this.disp_l.getRaster().setPixels(0, 0, N, M, ld);
     this.disp_r.getRaster().setPixels(0, 0, N, M, rd);
   }
+
+  public void caculateDisparityCIELab(MatchingCost mc) {
+    int[][] left = Utils.getPixels(this.left),
+            right = Utils.getPixels(this.right);
+    int[][] leftLab = Utils.rgb2lab(left),
+            rightLab = Utils.rgb2lab(right);
+    
+    int M = left.length, N = left[0].length;
+    int[] ld = new int[M*N], rd = new int[M*N];
+
+    for (int i = 0; i < M; i++) {
+      for (int j = 0; j < N; j++) {
+        int[][] lp = getPatch(left, i, j),
+                rp = getPatch(right, i, j);
+
+        int[][] lpLab = getPatch(leftLab, i, j),
+                rpLab = getPatch(rightLab, i, j);
+
+          // For left eye image disparity map
+        double cost = Double.POSITIVE_INFINITY;
+        int min_d = 0;
+        for (int d = 0; d < this.max_d; d++) {
+          int[][] rp_d = getPatch(right, i, j - d),
+                  rpLab_d = getPatch(right, i, j - d);
+          double matchingCost = mc.matchingCostLab(lp, rp_d, lpLab, rpLab_d);
+          if (matchingCost < cost) {
+              cost = matchingCost;
+              min_d = d;
+          }
+        }
+        ld[i*N + j] = min_d;
+
+        // For right eye image disparity map
+        cost = Double.POSITIVE_INFINITY;
+        min_d = 0;
+        for (int d = 0; d < this.max_d; d++) {
+          int[][] lp_d = getPatch(left, i, j + d),
+                  lpLab_d = getPatch(left, i, j + d);
+          double matchingCost = mc.matchingCostLab(rp, lp_d, rpLab, lpLab_d);
+          if (matchingCost < cost) {
+            cost = matchingCost;
+            min_d = d;
+          }
+        }
+        rd[i*N + j] = min_d;
+      }
+    }
+
+    this.disp_l.getRaster().setPixels(0, 0, N, M, ld);
+    this.disp_r.getRaster().setPixels(0, 0, N, M, rd);
+  }
+  
   // Helper
   public void evaluate(BufferedImage benchmark_left, BufferedImage benchmark_right) {
     try {
