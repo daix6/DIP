@@ -7,11 +7,11 @@ public class StereoMatching {
   public BufferedImage disp_l, disp_r;
   public int max_d, patch;
   private double[] badRate;
-  
+
   public StereoMatching(BufferedImage left, BufferedImage right) {
     this(left, right, 79, 5);
   }
-  
+
   public StereoMatching(BufferedImage left, BufferedImage right, int max_disparity, int patch) {
     this.left = left;
     this.right = right;
@@ -19,7 +19,7 @@ public class StereoMatching {
     this.patch = patch;
   }
 
-  public void ssd() {
+  public void caculateDisparity(MatchingCost mc) {
     int[][] left = Utils.getPixels(this.left),
             right = Utils.getPixels(this.right);
     
@@ -40,7 +40,7 @@ public class StereoMatching {
         int min_d = 0;
         for (int d = 0; d < this.max_d; d++) {
           int[][] rp_d = getPatch(right, i, j - d);
-          double ssdcost = ssdCost(lp, rp_d);
+          double ssdcost = mc.matchingCost(lp, rp_d);
           if (ssdcost < cost) {
             cost = ssdcost;
             min_d = d;
@@ -53,7 +53,7 @@ public class StereoMatching {
         min_d = 0;
         for (int d = 0; d < this.max_d; d++) {
           int[][] lp_d = getPatch(left, i, j + d);
-          double ssdcost = ssdCost(rp, lp_d);
+          double ssdcost = mc.matchingCost(rp, lp_d);
           if (ssdcost < cost) {
             cost = ssdcost;
             min_d = d;
@@ -62,32 +62,20 @@ public class StereoMatching {
         rd[i*N + j] = min_d;
       }
     }
-    
+
     this.disp_l.getRaster().setPixels(0, 0, N, M, ld);
     this.disp_r.getRaster().setPixels(0, 0, N, M, rd);
   }
-
-  // Cost Evaluation
-  private double ssdCost(int[][] left, int[][] right) {
-    double cost = 0;
-    for (int i = 0; i < this.patch; i++) {
-      for (int j = 0; j < this.patch; j++) {
-        cost += Math.pow(Math.abs(left[i][j] - right[i][j]), 2);
-      }
-    }
-    return cost;
-  }
-
   // Helper
   public void evaluate(BufferedImage benchmark_left, BufferedImage benchmark_right) {
     try {
       if (this.disp_l.getType() != BufferedImage.TYPE_BYTE_GRAY || this.disp_r.getType() != BufferedImage.TYPE_BYTE_GRAY) {
         throw new Exception("Wrong image type.");
       }
-    
+
       int[][] l = Utils.getPixels(this.disp_l), r = Utils.getPixels(this.disp_r);
       int[][] bpL = Utils.getPixels(benchmark_left), bpR = Utils.getPixels(benchmark_right);
-      
+
       int M = benchmark_left.getHeight(), N = benchmark_right.getWidth();
 
       int[] bad= new int[] {0,0};
@@ -105,9 +93,9 @@ public class StereoMatching {
       e.printStackTrace();
     }
   }
-  
-  public void printBad(String testcase) {
-    System.out.println("The bad pixels rate of " + testcase);
+
+  public void printBad(String testcase, String method) {
+    System.out.println("The percentage of bad pixels in case: " + testcase + ", with method: " + method);
     System.out.print(this.badRate[0]);
     System.out.print(" ");
     System.out.println(this.badRate[1]);
@@ -126,7 +114,6 @@ public class StereoMatching {
           patch[i - x + pad][j - y + pad] = 0;
       }
     }
-    
     return patch;
   }
 }

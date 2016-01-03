@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
@@ -46,6 +45,15 @@ public class Utils {
     return assetsDir;
   }
 
+  public static String[] getAllCases() {
+    File file = new File(Utils.getAssetsDir());
+    File[] cases = file.listFiles();
+    String[] testcases = new String[cases.length];
+    for (int i = 0; i < testcases.length; i++)
+      testcases[i] = cases[i].getName();
+    return testcases;
+  }
+  
   public static String getDestDir() {
       File file = new File("");
       String parentDir = file.getAbsolutePath();
@@ -89,10 +97,6 @@ public class Utils {
     }
     
     return img;
-  }
-  
-  public static int toRGB(int pixel) { 
-    return pixel + (pixel << 8) + (pixel << 16) + (0xff << 24);
   }
 
   public static int[][] getPixels(BufferedImage image) {
@@ -158,7 +162,7 @@ public class Utils {
       l.mkdirs();
       ImageIO.write(left, "PNG", l);
       ImageIO.write(right, "PNG", r);
-      System.out.println("Saved");
+      System.out.println("Images has been saved.");
     } catch(Exception e) {
       e.printStackTrace();
     }
