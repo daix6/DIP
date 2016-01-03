@@ -19,6 +19,7 @@ hw*/assets/**/*
 
 *.class
 Stereo_Matching/assets/**/*
+dest/
 
 ## JS
 
