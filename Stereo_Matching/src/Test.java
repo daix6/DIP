@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import org.apache.commons.cli.CommandLine;
@@ -24,6 +25,12 @@ public class Test {
       sm.evaluate(benchmark_left, benchmark_right);
       sm.printBad(testcase, "NCC");
       Utils.saveImage(new BufferedImage[]{sm.disp_l, sm.disp_r}, testcase, "NCC");
+      
+      // ASW
+      sm.caculateDisparityCIELab(new ASW());
+      sm.evaluate(benchmark_left, benchmark_right);
+      sm.printBad(testcase, "ASW");
+      Utils.saveImage(new BufferedImage[]{sm.disp_l, sm.disp_r}, testcase, "ASW");
     }
   }
 
@@ -50,6 +57,15 @@ public class Test {
         sm.evaluate(benchmark_left, benchmark_right);
         sm.printBad(testcase, "NCC");
         Utils.saveImage(new BufferedImage[]{sm.disp_l, sm.disp_r}, testcase, "NCC");
+
+        // ASW
+        sm.caculateDisparityCIELab(new ASW());
+        sm.evaluate(benchmark_left, benchmark_right);
+        sm.printBad(testcase, "ASW");
+        Utils.saveImage(new BufferedImage[]{sm.disp_l, sm.disp_r}, testcase, "ASW");
+        
+        // Add 10 intensity to right-eye image
+        StereoMatching sm10 = new StereoMatching(left, Utils.addIntensity(right, 10));
 
     } else if (cmd.hasOption("all")) {
         runAllCases();

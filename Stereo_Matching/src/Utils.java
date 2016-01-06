@@ -45,6 +45,13 @@ public class Utils {
     return assetsDir;
   }
 
+  public static String getDestDir() {
+      File file = new File("");
+      String parentDir = file.getAbsolutePath();
+      String destDir = parentDir + File.separator + "dest";
+      return destDir;
+  }
+  
   public static String[] getAllCases() {
     File file = new File(Utils.getAssetsDir());
     File[] cases = file.listFiles();
@@ -52,13 +59,6 @@ public class Utils {
     for (int i = 0; i < testcases.length; i++)
       testcases[i] = cases[i].getName();
     return testcases;
-  }
-  
-  public static String getDestDir() {
-      File file = new File("");
-      String parentDir = file.getAbsolutePath();
-      String destDir = parentDir + File.separator + "dest";
-      return destDir;
   }
 
   public static BufferedImage getImage(String testcase, int which) {
@@ -101,11 +101,10 @@ public class Utils {
 
   public static int[][] getPixels(BufferedImage image) {
     int type = image.getType();
-    int w = image.getWidth();
-    int h = image.getHeight();
+    int w = image.getWidth(), h = image.getHeight();
     byte[] data = ((DataBufferByte)image.getRaster().getDataBuffer()).getData();
     int[][] pixels = new int[h][w];
-    
+
     if (type == BufferedImage.TYPE_3BYTE_BGR) {
       final int pLength = 3;
       for (int p = 0, row = 0, col = 0; p < data.length; p += pLength) {
@@ -130,9 +129,47 @@ public class Utils {
           row++;
         }
       }
-    }
+    } else
+      System.err.println("Wrong image type");
 
     return pixels;
+  }
+
+  public static double[][] getIntensity(BufferedImage image) {
+    int type = image.getType();
+    int w = image.getWidth(),  h = image.getHeight();
+    byte[] data = ((DataBufferByte)image.getRaster().getDataBuffer()).getData();
+    double[][] intensity = new double[h][w];
+
+    if (type == BufferedImage.TYPE_3BYTE_BGR) {
+      for (int p = 0, row = 0, col = 0; p < data.length; p += 3) {
+        int B = ((int) data[p] & 0xff);           // blue
+        int G = (((int) data[p+1] & 0xff) << 8);  // green
+        int R = (((int) data[p+2] & 0xff) << 16); // red
+        intensity[row][col] = 0.2989 * R + 0.5870 * G + 0.1140 * B;
+        col++;
+        if (col == w) {
+          col = 0;
+          row++;
+        }
+      }
+    } else if (type == BufferedImage.TYPE_BYTE_GRAY) {
+      for (int p = 0, row = 0, col = 0; p < data.length; p++) {
+        intensity[row][col] = (int) data[p] & 0xff;
+        col++;
+        if (col == w) {
+          col = 0;
+          row++;
+        }
+      }
+    } else
+        System.err.println("Wrong image type");
+
+    return intensity;
+  }
+
+  public static BufferedImage addIntensity(BufferedImage image, int intensity) {
+    return null;
   }
 
   public static void saveImage(BufferedImage[] image, String testcase, String method) {
@@ -166,6 +203,14 @@ public class Utils {
     } catch(Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public static double rgb2gray(int rgb) {
+    int R = ((int)(rgb >> 16)) & 0xff,
+        G = ((int)(rgb >> 8)) & 0xff,
+        B = ((int)rgb) & 0xff;
+
+    return 0.2989 * R + 0.5870 * G + 0.1140 * B;
   }
 
   public static int[][] rgb2lab(int[][] image) {
@@ -234,7 +279,7 @@ public class Utils {
         bs = 200 * (fx - fz); // -.5 ~ .5
         
         // All scale to [0,255]
-        labs[i][j] = (int)(2.55*Ls + .5) << 16 + (int)(as + .5) << 8 + (int)(bs + .5);
+        labs[i][j] = ((int)(2.55*Ls + .5) << 16) + ((int)(as + .5) << 8) + ((int)(bs + .5));
       }
     }
 

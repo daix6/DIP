@@ -1,5 +1,5 @@
 public class NCC implements MatchingCost {
-  public double matchingCost(int[][] left, int[][] right) {
+  public double matchingCost(double[][] left, double[][] right) {
     double cost = 0;
     double mean_l = 0, mean_r = 0, std_l = 0, std_r = 0;
 
@@ -19,19 +19,16 @@ public class NCC implements MatchingCost {
         std_r += Math.pow(right[i][j] - mean_r, 2);
       }
 
-    std_l /= (M * N);
-    std_r /= (M * N);
-    std_l = Math.sqrt(std_l);
-    std_r = Math.sqrt(std_r);
+    std_l = Math.sqrt(std_l/(M * N));
+    std_r = Math.sqrt(std_r/(M * N));
 
     for (int i = 0; i < M; i++)
-      for (int j = 0; j < N; j++) {
+      for (int j = 0; j < N; j++)
         cost += (left[i][j] - mean_l) * (right[i][j] - mean_r);
-      }
 
-    return 1 - cost / (M * N * std_l * std_r);
+    return 10 - cost / (M * N * std_l * std_r);
   }
 
   // It should not be used.
-  public double matchingCost(int[][] left, int[][] right, int[][] leftLab, int[][] rightLab) {return 0;}
+  public double matchingCostLab(int[][] left, int[][] right, int[][] leftLab, int[][] rightLab) {return 0;}
 }
