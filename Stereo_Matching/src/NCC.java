@@ -26,7 +26,7 @@ public class NCC implements MatchingCost {
       for (int j = 0; j < N; j++)
         cost += (left[i][j] - mean_l) * (right[i][j] - mean_r);
 
-    return 10 - cost / (M * N * std_l * std_r);
+    return 1000 - cost / (M * N * std_l * std_r);
   }
 
   // It should not be used.

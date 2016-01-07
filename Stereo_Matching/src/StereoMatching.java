@@ -34,9 +34,9 @@ public class StereoMatching {
                    rp = getPatch(right, i, j);
 
         // For left eye image disparity map
-        double cost = Double.POSITIVE_INFINITY;
+        double cost = Double.MAX_VALUE;
         int min_d = 0;
-        for (int d = 0; d < this.max_d; d++) {
+        for (int d = 0; d <= this.max_d; d++) {
           double[][] rp_d = getPatch(right, i, j - d);
           double matchingCost = mc.matchingCost(lp, rp_d);
           if (matchingCost < cost) {
@@ -47,9 +47,9 @@ public class StereoMatching {
         ld[i*N + j] = min_d;
 
         // For right eye image disparity map
-        cost = Double.POSITIVE_INFINITY;
+        cost = Double.MAX_VALUE;
         min_d = 0;
-        for (int d = 0; d < this.max_d; d++) {
+        for (int d = 0; d <= this.max_d; d++) {
           double[][] lp_d = getPatch(left, i, j + d);
           double matchingCost = mc.matchingCost(rp, lp_d);
           if (matchingCost < cost) {
@@ -70,9 +70,9 @@ public class StereoMatching {
             right = Utils.getPixels(this.right);
     int[][] leftLab = Utils.rgb2lab(left),
             rightLab = Utils.rgb2lab(right);
-    
-    int M = left.length, N = left[0].length;
 
+    int M = left.length, N = left[0].length;
+    
     this.disp_l = new BufferedImage(N, M, BufferedImage.TYPE_BYTE_GRAY);
     this.disp_r = new BufferedImage(N, M, BufferedImage.TYPE_BYTE_GRAY);
 
@@ -87,9 +87,9 @@ public class StereoMatching {
                 rpLab = getPatch(rightLab, i, j);
 
           // For left eye image disparity map
-        double cost = Double.POSITIVE_INFINITY;
+        double cost = Double.MAX_VALUE;
         int min_d = 0;
-        for (int d = 0; d < this.max_d; d++) {
+        for (int d = 0; d <= this.max_d; d++) {
           int[][] rp_d = getPatch(right, i, j - d),
                   rpLab_d = getPatch(right, i, j - d);
           double matchingCost = mc.matchingCostLab(lp, rp_d, lpLab, rpLab_d);
@@ -101,9 +101,9 @@ public class StereoMatching {
         ld[i*N + j] = min_d;
 
         // For right eye image disparity map
-        cost = Double.POSITIVE_INFINITY;
+        cost = Double.MAX_VALUE;
         min_d = 0;
-        for (int d = 0; d < this.max_d; d++) {
+        for (int d = 0; d <= this.max_d; d++) {
           int[][] lp_d = getPatch(left, i, j + d),
                   lpLab_d = getPatch(left, i, j + d);
           double matchingCost = mc.matchingCostLab(rp, lp_d, rpLab, lpLab_d);
@@ -112,7 +112,7 @@ public class StereoMatching {
             min_d = d;
           }
         }
-        rd[i*N + j] = min_d; 
+        rd[i*N + j] = min_d;
       }
     }
 

@@ -46,10 +46,10 @@ public class Utils {
   }
 
   public static String getDestDir() {
-      File file = new File("");
-      String parentDir = file.getAbsolutePath();
-      String destDir = parentDir + File.separator + "dest";
-      return destDir;
+    File file = new File("");
+    String parentDir = file.getAbsolutePath();
+    String destDir = parentDir + File.separator + "dest";
+    return destDir;
   }
   
   public static String[] getAllCases() {
@@ -65,20 +65,20 @@ public class Utils {
     String assetsFolder = getAssetsDir(), filename;
 
     switch(which) {
-    case LEFT:
-      filename = LEFT_IMAGE;
-      break;
-    case RIGHT:
-      filename = RIGHT_IMAGE;
-      break;
-    case BENCHMARK_LEFT:
-      filename = LEFT_BENCHMARK;
-      break;
-    case BENCHMARK_RIGHT:
-      filename = RIGHT_BENCHMARK;
-      break;
-    default:
-      filename = "";
+      case LEFT:
+        filename = LEFT_IMAGE;
+        break;
+      case RIGHT:
+        filename = RIGHT_IMAGE;
+        break;
+      case BENCHMARK_LEFT:
+        filename = LEFT_BENCHMARK;
+        break;
+      case BENCHMARK_RIGHT:
+        filename = RIGHT_BENCHMARK;
+        break;
+      default:
+        filename = "";
     }
 
     String path = assetsFolder + File.separator + testcase + File.separator + filename;
@@ -143,9 +143,9 @@ public class Utils {
 
     if (type == BufferedImage.TYPE_3BYTE_BGR) {
       for (int p = 0, row = 0, col = 0; p < data.length; p += 3) {
-        int B = ((int) data[p] & 0xff);           // blue
-        int G = (((int) data[p+1] & 0xff) << 8);  // green
-        int R = (((int) data[p+2] & 0xff) << 16); // red
+        int B = (int) data[p] & 0xff;           // blue
+        int G = (int) data[p+1] & 0xff;         // green
+        int R = (int) data[p+2] & 0xff;         // red
         intensity[row][col] = 0.2989 * R + 0.5870 * G + 0.1140 * B;
         col++;
         if (col == w) {
@@ -168,8 +168,20 @@ public class Utils {
     return intensity;
   }
 
-  public static BufferedImage addIntensity(BufferedImage image, int intensity) {
-    return null;
+  public static BufferedImage addIntensity(BufferedImage image, double intensity) {
+    int w = image.getWidth(), h = image.getHeight();
+
+    double[][] inten = Utils.getIntensity(image);
+    double[] added = new double[w*h];
+
+    for (int i = 0; i < h; i++)
+      for (int j = 0; j < w; j++)
+        added[i*w + j] = inten[i][j] + intensity;
+
+    BufferedImage modified = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_GRAY);
+    modified.getRaster().setPixels(0, 0, w, h, added);
+
+    return modified;
   }
 
   public static void saveImage(BufferedImage[] image, String testcase, String method) {
@@ -224,35 +236,36 @@ public class Utils {
         double Ls, as, bs;
         double eps = 216.f/24389.f;
         double k = 24389.f/27.f;
-        
-        double Xr = 0.964221f,
-              Yr = 1.0f,
-              Zr = 0.825211f;
+
+        double Xr =0.964221f;  // reference white D50
+        double Yr = 1.0f;
+        double Zr = 0.825211f;
         
         // To [0,1]
         r = (((int)pixel >> 16) & 0xff) / 255.f;
         g = (((int)pixel >> 8) & 0xff) / 255.f;
         b = (((int)pixel) & 0xff) / 255.f;
 
-        if (r < 0.04045)
+        // assuming sRGB (D65)
+        if (r <= 0.04045)
           r = r/12;
         else
           r = (double) Math.pow((r + 0.055)/1.055, 2.4);
 
-        if (g < 0.04045)
-            g = g/12;
-          else
-            g = (double) Math.pow((g + 0.055)/1.055, 2.4);
+        if (g <= 0.04045)
+          g = g/12;
+       else
+          g = (double) Math.pow((g + 0.055)/1.055, 2.4);
  
-        if (b < 0.04045)
-            b = r/12;
-          else
-            b = (double) Math.pow((b + 0.055)/1.055, 2.4);
+        if (b <= 0.04045)
+          b = r/12;
+        else
+          b = (double) Math.pow((b + 0.055)/1.055, 2.4);
 
         // RGB TO XYZ
-        X =  0.436052025f * r + 0.385081593f * g + 0.143087414f * b;
-        Y =  0.222491598f * r + 0.71688606f  * g + 0.060621486f * b;
-        Z =  0.013929122f * r + 0.097097002f * g + 0.71418547f  * b;
+        X = 0.436052025f * r + 0.385081593f * g + 0.143087414f * b;
+        Y = 0.222491598f * r + 0.71688606f  * g + 0.060621486f * b;
+        Z = 0.013929122f * r + 0.097097002f * g + 0.71418547f  * b;
         
         // XYZ TO LAB
         xr = X/Xr;
@@ -270,16 +283,16 @@ public class Utils {
           fy = (double) ((k * yr + 16.) / 116.);
         
         if (zr > eps)
-            fz = (double) Math.pow(zr, 1/3.);
-          else
-            fz = (double) ((k * zr + 16.) / 116.);
-        
-        Ls = (116 * fy) - 16; // 0 ~ 1
-        as = 500 * (fx - fy); // -.5 ~ .5
-        bs = 200 * (fx - fz); // -.5 ~ .5
+          fz = (double) Math.pow(zr, 1/3.);
+        else
+          fz = (double) ((k * zr + 16.) / 116.);
+
+        Ls = (116 * fy) - 16;
+        as = 500 * (fx - fy);
+        bs = 200 * (fy - fz);
         
         // All scale to [0,255]
-        labs[i][j] = ((int)(2.55*Ls + .5) << 16) + ((int)(as + .5) << 8) + ((int)(bs + .5));
+        labs[i][j] = ((int)(2.55*Ls + .5) << 16) + ((int)(as + 128.5) << 8) + ((int)(bs + 128.5));
       }
     }
 

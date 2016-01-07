@@ -35,19 +35,19 @@ public class ASW implements MatchingCost {
   }
 
   private double w(int pLab, int qLab, int px, int py, int qx, int qy) {
-    return this.k * Math.exp(-(similarity(pLab, qLab) + proximity(px, py, qx, qy)));
+    return this.k * Math.exp(-similarity(pLab, qLab) - proximity(px, py, qx, qy));
   }
 
   private double e(int pRGB, int pdRGB) {
-      int pR = ((int)pRGB >> 16) & 0xff,
-          pG = ((int)pRGB >> 8) & 0xff,
-          pB = (int)pRGB & 0xff;
+    int pR = ((int)pRGB >> 16) & 0xff,
+        pG = ((int)pRGB >> 8) & 0xff,
+        pB = (int)pRGB & 0xff;
 
-      int pdR = ((int)pdRGB >> 16) & 0xff,
-          pdG = ((int)pdRGB >> 8) & 0xff,
-          pdB = (int)pdRGB & 0xff;
+    int pdR = ((int)pdRGB >> 16) & 0xff,
+        pdG = ((int)pdRGB >> 8) & 0xff,
+        pdB = (int)pdRGB & 0xff;
 
-      return Math.abs(pR - pdR) + Math.abs(pG - pdG) + Math.abs(pB - pdB);
+    return Math.abs(pR - pdR) + Math.abs(pG - pdG) + Math.abs(pB - pdB);
   }
   
   private double similarity(int pLab, int qLab) {

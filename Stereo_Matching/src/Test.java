@@ -31,6 +31,20 @@ public class Test {
       sm.evaluate(benchmark_left, benchmark_right);
       sm.printBad(testcase, "ASW");
       Utils.saveImage(new BufferedImage[]{sm.disp_l, sm.disp_r}, testcase, "ASW");
+      
+      // Add 10 intensity to right-eye image
+      StereoMatching sm10 = new StereoMatching(left, Utils.addIntensity(right, 10));
+      // SSD
+      sm10.caculateDisparity(new SSD());
+      sm10.evaluate(benchmark_left, benchmark_right);
+      sm10.printBad(testcase, "SSD");
+      Utils.saveImage(new BufferedImage[]{sm10.disp_l, sm10.disp_r}, testcase, "SSD_ADD_10");
+
+      // NCC
+      sm10.caculateDisparity(new NCC());
+      sm10.evaluate(benchmark_left, benchmark_right);
+      sm10.printBad(testcase, "NCC");
+      Utils.saveImage(new BufferedImage[]{sm10.disp_l, sm10.disp_r}, testcase, "NCC_ADD_10");
     }
   }
 
@@ -45,8 +59,9 @@ public class Test {
                 benchmark_left = Utils.getImage(testcase, Utils.BENCHMARK_LEFT),
                 benchmark_right = Utils.getImage(testcase, Utils.BENCHMARK_RIGHT);
 
-        // SSD
         StereoMatching sm = new StereoMatching(left, right);
+
+        // SSD
         sm.caculateDisparity(new SSD());
         sm.evaluate(benchmark_left, benchmark_right);
         sm.printBad(testcase, "SSD");
@@ -63,9 +78,21 @@ public class Test {
         sm.evaluate(benchmark_left, benchmark_right);
         sm.printBad(testcase, "ASW");
         Utils.saveImage(new BufferedImage[]{sm.disp_l, sm.disp_r}, testcase, "ASW");
-        
+
         // Add 10 intensity to right-eye image
         StereoMatching sm10 = new StereoMatching(left, Utils.addIntensity(right, 10));
+
+        // SSD
+        sm10.caculateDisparity(new SSD());
+        sm10.evaluate(benchmark_left, benchmark_right);
+        sm10.printBad(testcase, "SSD");
+        Utils.saveImage(new BufferedImage[]{sm10.disp_l, sm10.disp_r}, testcase, "SSD_ADD_10");
+
+        // NCC
+        sm10.caculateDisparity(new NCC());
+        sm10.evaluate(benchmark_left, benchmark_right);
+        sm10.printBad(testcase, "NCC");
+        Utils.saveImage(new BufferedImage[]{sm10.disp_l, sm10.disp_r}, testcase, "NCC_ADD_10");
 
     } else if (cmd.hasOption("all")) {
         runAllCases();
