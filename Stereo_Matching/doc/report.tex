@@ -169,18 +169,128 @@ $$ \frac{1}{n}\sum_{x,y}\frac{(f(x,y) - \overline{f})(t(x,y)-\overline{t})}{\sig
 	\caption{景深图像（ASW），窗口大小33 $\times$ 33}
 \end{figure}
 
-ASW 算法也是一个局部的计算匹配代价的算法，通过计算\ $\omega_{x,y)$ （依据距离 （Proximity）与像素值差（Similarity）） 得到窗口中每一个点的权重，再依据权重与两个窗口对应像素点的像素值的差，得到匹配代价。这也是其名字中自适应的意义。 \\
+ASW 算法也是一个局部的计算匹配代价的算法，通过计算\ $\omega_{x,y}$ （依据距离 （Proximity）与像素值差（Similarity）） 得到窗口中每一个点的权重，再依据权重与两个窗口对应像素点的像素值的差，得到匹配代价。这也是其名字中自适应的意义。 \\
 \indent 从结果上来看，ASW 的结果与\ NCC 相比，那些白色的类似于盐噪声的部分相对少了些（结合在一起了），图像的边缘轮廓更加清晰，其结果随着窗口的变大也更加接近标准图像。所以\textbf{在景深图的轮廓清晰程度与整体平滑程度上，ASW 比\ NCC 表现的更好}。
 
 \section{实现}
 
 \subsection{Evaluation}
+
+\begin{algorithm}
+  \caption{Evaluate the disparity map's quality}
+    \begin{algorithmic}[1]
+      \Function{evaluate}{$image$, $benchmark$}
+        \State $p$ = \Call{$GetIntensity$}{$image$} \Comment{The intensity array of image}
+        \State $q$ = \Call{$GetIntensity$}{$benchmark$} \Comment{The intensity array of benchmark}
+        \State $bad$ = 0 \Comment{The number of bad pixels}
+        \For{each $v1,v2$ in $p,q$} \Comment{$v1,v2$ is the intensity of every pixel}
+          \If{\Call{ABS}{$v1$ - $v2/3$} $>$ 1.0}
+          \State $bad$ += 1
+          \EndIf
+        \EndFor
+        \State \Return ($bad$ / $image.size$) $\times 100\%$
+	  \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Local Stereo Matching Basic Steps}
+
+\begin{algorithm}
+	\caption{Stereo Matching Basic Steps}
+	\begin{algorithmic}[1]
+		\Function{StereoMatching}{$left$, $right$, $d_{max}$, $patch$, $cm$} \\
+		\Comment{$patch$ is the support window's size, $cm$ is the method caculating the matching cost} \\
+		\State $p$ = \Call{$GetIntensity$}{$left$}
+		\State $q$ = \Call{$GetIntensity$}{$right$}
+		\State $dl, dr$ \Comment{An array with the same size as left and right}
+		\For{each $x,y$ in $p,q$} \Comment {$x,y$, the coordinate}
+		    \State $lp$ = \Call{$getPatch$}{$left$, $x$, $y$, $patch$}, $lp$ = \Call{$getPatch$}{$right$, $x$, $y$, $patch$}
+			\For{each $d$ in [0..$d_{max}$]}
+				\State $rp_d$ = \Call{$getPatch$}{$right$, $x$, $y-d$, $patch$}
+				\State $lp_d$ = \Call{$getPatch$}{$left$, $x$, $y+d$, $patch$}
+				\State $cost_l$ = \Call{$cm$}{$lp$, $rp_d$}
+				\State $cost_r$ = \Call{$cm$}{$rp$, $lp_d$}
+			\EndFor
+			\State $dl\left[x,y\right]$ = the $d$ makes $cost_l$ the smallest
+			\State $dr\left[x,y\right]$ = the $d$ makes $cost_r$ the smallest
+		\EndFor
+		\State \Return $disp1$ constructed with $dl$, $disp5$ constructed with $dr$
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
 \subsection{SSD - Sum of Squared Differences}
+
+\begin{algorithm}[H]
+	\caption{SSD algorithm that caculate the matching cost}
+	\begin{algorithmic}[1]
+		\Function{evaluate}{$left$, $right$}
+			\State $cost$ = 0
+			\For{each $v1, v2$ in $left, right$}
+				\State $cost$ += \Call{POW}{($v1$ - $v2$), 2}
+			\EndFor
+			\State \Return cost
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
 \subsection{NCC - Normalized Correlation Coefficient}
-\subsection{Add intensity to right eye image}
+
+\begin{algorithm}[H]
+	\caption{NCC algorithm that caculate the matching cost}
+	\begin{algorithmic}[1]
+		\Function{NCC}{$left$, $right$}
+			\State $cost$ = 0
+			\State $size$ = $left$'s size
+			\State $\mu_l, \mu_r$ = The mean of $left$ and $right$
+			\State $\sigma_l, \sigma_r$ = The standard variance of $left$ and $right$
+			\For{each $v1,v2$ in $left,right$}
+				\State $cost$ += $(v1 - \mu_l)\times(v2 - \mu_r)$
+			\EndFor
+			\State \Return 1000 - $\frac{cost}{size \times \sigma_l \times \sigma_r}$
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
 \subsection{ASW - Adapted Support Weight}
 
-\section{讨论}
+用\ ASW 与用\ SSD 和\ NCC 时使用的 \textbf{MatchingCost} 与之前定义的稍有差别，需要加入左右图在\textbf{L*a*b*}下的表示。
 
+\begin{algorithm}[H]
+	\caption{ASW algorithm that caculate the matching cost}
+	\begin{algorithmic}[1]
+		\Function{ASW}{$left$, $right$, $leftLab$, $rightLab$}
+			\State $nominator$ = 0, $denominator$ = 0
+			\State $x',y'$ is the center coordinate of arguments
+			\For{each $x,y$ in $left, right$}
+				\State $nominator$ += \Call{W}{$leftLab$, $rightLab$, $x'$, $y'$, $x$, $y$} $\times$ \Call{E}{$left$, $right$, $x$, $y$}
+				\State $denominator$ += \Call{W}{$leftLab$, $rightLab$, $x'$, $y'$, $x$, $y$}
+			\EndFor
+			\State \Return $\frac{nominator}{denominator}$
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{Adapted Weighted}
+	\begin{algorithmic}[1]
+		\Function{W}{$l$, $r$, $x'$, $y'$, $x$, $y$, $k=1$}
+			\State $similarity$ = $\sqrt{(L_l - L_r)^2 + (A_l - A_r)^2 + (B_l - B_r)^2}$
+			\State $proximity$ = $\sqrt{(x'-x)^2 + (y'-y)^2}$
+			\State \Return $k \times $ \Call{EXP}{-($similarity$ + $proximity$)}
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{Intensity Difference}
+	\begin{algorithmic}[1]
+		\Function{E}{$l$, $r$, $x$, $y$}
+		\State \Return $|R_l - R_r| + |G_l - G_r| + |B_l - B_r|$
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+\section{讨论}
 
 \end{document}          
