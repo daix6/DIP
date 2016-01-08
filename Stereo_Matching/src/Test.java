@@ -6,7 +6,7 @@ import org.apache.commons.cli.CommandLine;
 public class Test {
   public static void runAllCases() {
     String[] cases = Utils.getAllCases();
-    
+
     for (String testcase : cases) {
       BufferedImage left = Utils.getImage(testcase, Utils.LEFT),
                     right = Utils.getImage(testcase, Utils.RIGHT),
@@ -25,13 +25,13 @@ public class Test {
       sm.evaluate(benchmark_left, benchmark_right);
       sm.printBad(testcase, "NCC");
       Utils.saveImage(new BufferedImage[]{sm.disp_l, sm.disp_r}, testcase, "NCC");
-      
+
       // ASW
       sm.caculateDisparityCIELab(new ASW());
       sm.evaluate(benchmark_left, benchmark_right);
       sm.printBad(testcase, "ASW");
       Utils.saveImage(new BufferedImage[]{sm.disp_l, sm.disp_r}, testcase, "ASW");
-      
+
       // Add 10 intensity to right-eye image
       StereoMatching sm10 = new StereoMatching(left, Utils.addIntensity(right, 10));
       // SSD

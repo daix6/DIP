@@ -119,7 +119,7 @@ public class StereoMatching {
     this.disp_l.getRaster().setPixels(0, 0, N, M, ld);
     this.disp_r.getRaster().setPixels(0, 0, N, M, rd);
   }
-  
+
   // Helper
   public void evaluate(BufferedImage benchmark_left, BufferedImage benchmark_right) {
     try {

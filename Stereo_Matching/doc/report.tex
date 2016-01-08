@@ -1,0 +1,186 @@
+\documentclass[]{article}
+
+% Basic Paper Style
+\usepackage[a4paper,top=0.6in, bottom=0.6in, left=1in, right=1in,footskip=0.3in]{geometry}
+
+% Chinese support
+\usepackage{ctex}
+
+% Picture Support
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Pseduocode support
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Title Page
+\title{DIP Final Project: Stereo Matching}
+\author{戴旋 13331043}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{实验结果与给出问题的答案}
+
+\textit{\textbf{注 1}：由于测试样例过多，这里只给出了测试样例\ 1 - Aloe 的实验结果。若想查看所有样例，请查看\ \textbf{dest/} 文件夹。} \\
+\indent\textit{\textbf{注 2}：在计算匹配代价的参数中，景深\ \textbf{d} 最大可能为\ 79；给出的实验结果中若特别没有指明，使用的\ support window 的大小均为 $5 \times 5$ 的。（由于不清楚\ disparity 的标准译名，在本报告中姑且称之为景深。）} \\
+\indent\textit{\textbf{注 3}：本报告中评估图像采用的是错误的像素点，即与给出的\textbf{标准景深图像}相比，像素值相差大于\ 3 的像素点。}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		% pt = px * 72 / DPI
+		\includegraphics[width=192pt]{../assets/Aloe/view1.png}
+		\caption{左眼图像}
+	\end{subfigure}
+	~
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../assets/Aloe/view1.png}
+		\caption{右眼图像}
+	\end{subfigure}
+	\caption{原始图像}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../assets/Aloe/disp1.png}
+		\caption{左眼图像}
+	\end{subfigure}
+	~
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../assets/Aloe/disp5.png}
+		\caption{右眼图像}
+	\end{subfigure}
+	\caption{标准景深图像}
+\end{figure}
+
+\subsection{SSD - Sum of Squared Differences}
+
+使用\ SSD 算法计算匹配代价。 \\
+
+\indent 左图错误率约为25.5\%，右图的错误率约为26.6\%。
+\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.45\textwidth}
+			\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp1_SSD.png}
+			\caption{左眼图像}
+		\end{subfigure}
+		~
+		\begin{subfigure}{0.45\textwidth}
+			\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp5_SSD.png}
+			\caption{右眼图像}
+		\end{subfigure}
+		\caption{景深图像（SSD）}
+\end{figure}
+
+\subsection{NCC - Normalized Correlation Coefficient}
+
+使用\ NCC 算法计算匹配代价。NCC 的公式如下：
+$$ \frac{1}{n}\sum_{x,y}\frac{(f(x,y) - \overline{f})(t(x,y)-\overline{t})}{\sigma_f\sigma_t} $$
+其中$\overline{f}$、$\overline{t}$为均值，$\sigma_f$、$\sigma_t$为标准差。
+
+\indent 左图错误率约为24.2\%，右图的错误率约为24.9\%。
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp1_NCC.png}
+		\caption{左眼图像}
+	\end{subfigure}
+	~
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp5_NCC.png}
+		\caption{右眼图像}
+	\end{subfigure}
+	\caption{景深图像（NCC）}
+\end{figure}
+
+\subsection{Add intensity to right eye image}
+
+为右眼图像的强度增加了10个单位之后，再次计算得到的图像如下。
+
+\indent SSD：左图错误率约为42.3\%，右图的错误率约为42.2\%。\\
+\indent NCC：左图错误率约为24.2\%，右图的错误率约为24.9\%。
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp1_SSD_ADD_10.png}
+		\caption{左眼图像}
+	\end{subfigure}
+	~
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp5_SSD_ADD_10.png}
+		\caption{右眼图像}
+	\end{subfigure}
+	\caption{景深图像（SSD）}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp1_NCC_ADD_10.png}
+		\caption{左眼图像}
+	\end{subfigure}
+	~
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp5_NCC_ADD_10.png}
+		\caption{右眼图像}
+	\end{subfigure}
+	\caption{景深图像（NCC）}
+\end{figure}
+
+从\ Aloe 这个样例的结果来看，在为右图中的所有像素点增加了相同程度强度之后，\textbf{SSD 受到了很大的影响}，产生了一些抽象的形变（在其他的图像上更明显）；而\textbf{\ NCC 几乎没被影响 }。而这个结论在其它所有案例上都得到了验证。这个结果产生的原始也很简单，SSD\ 的结果是单纯地通过像素值比较得到的，而\ NCC 比较的是两个窗口里像素值的相关性。所以说\ NCC 相较于\ SSD 是更稳定一些，更优秀一些。
+
+\subsection{ASW - Adapted Support Weight}
+
+使用\ ASW 算法计算匹配代价。ASW\ 算法中的我使用参数 $k=1, \gamma_{c} = 45, \gamma_{p} = 5$。\\
+
+\indent 左图错误率约为22\%，右图的错误率约为23\%。
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp1_ASW.png}
+		\caption{左眼图像}
+	\end{subfigure}
+	~
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp5_ASW.png}
+		\caption{右眼图像}
+	\end{subfigure}
+	\caption{景深图像（ASW），窗口大小5 $\times$ 5}
+\end{figure}
+
+\indent 左图错误率约为19\%，右图的错误率约为20\%。
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp1_ASW_33.png}
+		\caption{左眼图像}
+	\end{subfigure}
+	~
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=192pt]{../dest/Aloe/Aloe_disp5_ASW_33.png}
+		\caption{右眼图像}
+	\end{subfigure}
+	\caption{景深图像（ASW），窗口大小33 $\times$ 33}
+\end{figure}
+
+ASW 算法也是一个局部的计算匹配代价的算法，通过计算\ $\omega_{x,y)$ （依据距离 （Proximity）与像素值差（Similarity）） 得到窗口中每一个点的权重，再依据权重与两个窗口对应像素点的像素值的差，得到匹配代价。这也是其名字中自适应的意义。 \\
+\indent 从结果上来看，ASW 的结果与\ NCC 相比，那些白色的类似于盐噪声的部分相对少了些（结合在一起了），图像的边缘轮廓更加清晰，其结果随着窗口的变大也更加接近标准图像。所以\textbf{在景深图的轮廓清晰程度与整体平滑程度上，ASW 比\ NCC 表现的更好}。
+
+\section{实现}
+
+\subsection{Evaluation}
+\subsection{SSD - Sum of Squared Differences}
+\subsection{NCC - Normalized Correlation Coefficient}
+\subsection{Add intensity to right eye image}
+\subsection{ASW - Adapted Support Weight}
+
+\section{讨论}
+
+
+\end{document}          

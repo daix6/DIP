@@ -20,12 +20,12 @@ public class Utils {
   static public final String RIGHT_IMAGE = "view5.png";
   static public final String LEFT_BENCHMARK = "disp1.png";
   static public final String RIGHT_BENCHMARK = "disp5.png";
-  
+
   public static CommandLine parser(String[] args) {
     Options opts = new Options();
     opts.addOption("case", true, "The testcase that you want to run with");
     opts.addOption("all", false, "Run all testcase or not.");
-    
+
     CommandLineParser parser = new DefaultParser();
     CommandLine cmd = null;
     try {
@@ -51,7 +51,7 @@ public class Utils {
     String destDir = parentDir + File.separator + "dest";
     return destDir;
   }
-  
+
   public static String[] getAllCases() {
     File file = new File(Utils.getAssetsDir());
     File[] cases = file.listFiles();
@@ -84,18 +84,18 @@ public class Utils {
     String path = assetsFolder + File.separator + testcase + File.separator + filename;
     File file = new File(path);
     BufferedImage img = null;
-    
+
     try {
       img = ImageIO.read(file);
       int type = img.getType();
-      
+
       if (type != BufferedImage.TYPE_3BYTE_BGR && type != BufferedImage.TYPE_BYTE_GRAY) {
         throw new Exception("Wrong image type.");
       }
     } catch(Exception e) {
       e.printStackTrace();
     }
-    
+
     return img;
   }
 
@@ -196,7 +196,7 @@ public class Utils {
 
     int M = left.getHeight(), N = right.getWidth();
     WritableRaster lr = left.getRaster(), rr = right.getRaster(); 
-    
+
     for (int i = 0; i < M; i++) {
       for (int j = 0; j < N; j++) {
         lr.setSample(j, i, 0, lr.getSample(j, i, 0) * 3);
@@ -240,7 +240,7 @@ public class Utils {
         double Xr =0.964221f;  // reference white D50
         double Yr = 1.0f;
         double Zr = 0.825211f;
-        
+
         // To [0,1]
         r = (((int)pixel >> 16) & 0xff) / 255.f;
         g = (((int)pixel >> 8) & 0xff) / 255.f;
@@ -256,7 +256,7 @@ public class Utils {
           g = g/12;
        else
           g = (double) Math.pow((g + 0.055)/1.055, 2.4);
- 
+
         if (b <= 0.04045)
           b = r/12;
         else
@@ -266,12 +266,12 @@ public class Utils {
         X = 0.436052025f * r + 0.385081593f * g + 0.143087414f * b;
         Y = 0.222491598f * r + 0.71688606f  * g + 0.060621486f * b;
         Z = 0.013929122f * r + 0.097097002f * g + 0.71418547f  * b;
-        
+
         // XYZ TO LAB
         xr = X/Xr;
         yr = Y/Yr;
         zr = Z/Zr;
-        
+
         if (xr > eps)
           fx = (double) Math.pow(xr, 1/3.);
         else
@@ -281,7 +281,7 @@ public class Utils {
           fy = (double) Math.pow(yr, 1/3.);
         else
           fy = (double) ((k * yr + 16.) / 116.);
-        
+
         if (zr > eps)
           fz = (double) Math.pow(zr, 1/3.);
         else
@@ -290,7 +290,7 @@ public class Utils {
         Ls = (116 * fy) - 16;
         as = 500 * (fx - fy);
         bs = 200 * (fy - fz);
-        
+
         // All scale to [0,255]
         labs[i][j] = ((int)(2.55*Ls + .5) << 16) + ((int)(as + 128.5) << 8) + ((int)(bs + 128.5));
       }

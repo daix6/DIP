@@ -12,7 +12,7 @@ public class NCC implements MatchingCost {
 
     mean_l /= (M * N);
     mean_r /= (M * N);
-    
+
     for (int i = 0; i < M; i++)
       for (int j = 0; j < N; j++) {
         std_l += Math.pow(left[i][j] - mean_l, 2);

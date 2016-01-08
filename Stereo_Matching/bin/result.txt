@@ -1,0 +1,315 @@
+The percentage of bad pixels in case - Aloe, with method: SSD
+0.25500980019569397 0.26601049304008484
+Images has been saved.
+The percentage of bad pixels in case - Aloe, with method: NCC
+0.24152161180973053 0.24856004118919373
+Images has been saved.
+The percentage of bad pixels in case - Aloe, with method: ASW
+0.21977339684963226 0.23066650331020355
+Images has been saved.
+The percentage of bad pixels in case - Aloe, with method: SSD
+0.42256471514701843 0.42174187302589417
+Images has been saved.
+The percentage of bad pixels in case - Aloe, with method: NCC
+0.24222418665885925 0.24860434234142303
+Images has been saved.
+The percentage of bad pixels in case - Baby1, with method: SSD
+0.33718341588974 0.33307376503944397
+Images has been saved.
+The percentage of bad pixels in case - Baby1, with method: NCC
+0.20787252485752106 0.20818664133548737
+Images has been saved.
+The percentage of bad pixels in case - Baby1, with method: ASW
+0.349950909614563 0.34596556425094604
+Images has been saved.
+The percentage of bad pixels in case - Baby1, with method: SSD
+0.7524769306182861 0.8072181344032288
+Images has been saved.
+The percentage of bad pixels in case - Baby1, with method: NCC
+0.22931745648384094 0.21998560428619385
+Images has been saved.
+The percentage of bad pixels in case - Baby2, with method: SSD
+0.39042600989341736 0.39563509821891785
+Images has been saved.
+The percentage of bad pixels in case - Baby2, with method: NCC
+0.28663045167922974 0.29450953006744385
+Images has been saved.
+The percentage of bad pixels in case - Baby2, with method: ASW
+0.4146783649921417 0.42281919717788696
+Images has been saved.
+The percentage of bad pixels in case - Baby2, with method: SSD
+0.7465807199478149 0.779719889163971
+Images has been saved.
+The percentage of bad pixels in case - Baby2, with method: NCC
+0.30867090821266174 0.3068254590034485
+Images has been saved.
+The percentage of bad pixels in case - Baby3, with method: SSD
+0.4330570697784424 0.4317150115966797
+Images has been saved.
+The percentage of bad pixels in case - Baby3, with method: NCC
+0.2930608093738556 0.286146342754364
+Images has been saved.
+The percentage of bad pixels in case - Baby3, with method: ASW
+0.45991092920303345 0.45274290442466736
+Images has been saved.
+The percentage of bad pixels in case - Baby3, with method: SSD
+0.8256292939186096 0.8293153643608093
+Images has been saved.
+The percentage of bad pixels in case - Baby3, with method: NCC
+0.31247448921203613 0.29500895738601685
+Images has been saved.
+The percentage of bad pixels in case - Bowling1, with method: SSD
+0.6930261254310608 0.696526050567627
+Images has been saved.
+The percentage of bad pixels in case - Bowling1, with method: NCC
+0.4002786874771118 0.40010368824005127
+Images has been saved.
+The percentage of bad pixels in case - Bowling1, with method: ASW
+0.7012314200401306 0.7091839909553528
+Images has been saved.
+The percentage of bad pixels in case - Bowling1, with method: SSD
+0.8865966796875 0.9000194668769836
+Images has been saved.
+The percentage of bad pixels in case - Bowling1, with method: NCC
+0.4578585922718048 0.4439367353916168
+Images has been saved.
+The percentage of bad pixels in case - Bowling2, with method: SSD
+0.5108779072761536 0.5104142427444458
+Images has been saved.
+The percentage of bad pixels in case - Bowling2, with method: NCC
+0.3093709945678711 0.30880361795425415
+Images has been saved.
+The percentage of bad pixels in case - Bowling2, with method: ASW
+0.4918369948863983 0.4923616647720337
+Images has been saved.
+The percentage of bad pixels in case - Bowling2, with method: SSD
+0.8005430102348328 0.811786949634552
+Images has been saved.
+The percentage of bad pixels in case - Bowling2, with method: NCC
+0.33850282430648804 0.32537367939949036
+Images has been saved.
+The percentage of bad pixels in case - Cloth1, with method: SSD
+0.11291075497865677 0.09428997337818146
+Images has been saved.
+The percentage of bad pixels in case - Cloth1, with method: NCC
+0.11397368460893631 0.09497050940990448
+Images has been saved.
+The percentage of bad pixels in case - Cloth1, with method: ASW
+0.10443320870399475 0.0857476145029068
+Images has been saved.
+The percentage of bad pixels in case - Cloth1, with method: SSD
+0.19410201907157898 0.16103442013263702
+Images has been saved.
+The percentage of bad pixels in case - Cloth1, with method: NCC
+0.1140514612197876 0.0950288400053978
+Images has been saved.
+The percentage of bad pixels in case - Cloth2, with method: SSD
+0.3221147358417511 0.3266899585723877
+Images has been saved.
+The percentage of bad pixels in case - Cloth2, with method: NCC
+0.2002621591091156 0.2073778212070465
+Images has been saved.
+The percentage of bad pixels in case - Cloth2, with method: ASW
+0.30833905935287476 0.31282690167427063
+Images has been saved.
+The percentage of bad pixels in case - Cloth2, with method: SSD
+0.5704512596130371 0.5788902044296265
+Images has been saved.
+The percentage of bad pixels in case - Cloth2, with method: NCC
+0.22358155250549316 0.22801323235034943
+Images has been saved.
+The percentage of bad pixels in case - Cloth3, with method: SSD
+0.16605742275714874 0.15093006193637848
+Images has been saved.
+The percentage of bad pixels in case - Cloth3, with method: NCC
+0.1549290269613266 0.1369563788175583
+Images has been saved.
+The percentage of bad pixels in case - Cloth3, with method: ASW
+0.14827921986579895 0.13116209208965302
+Images has been saved.
+The percentage of bad pixels in case - Cloth3, with method: SSD
+0.4435024857521057 0.40501654148101807
+Images has been saved.
+The percentage of bad pixels in case - Cloth3, with method: NCC
+0.15635491907596588 0.138310968875885
+Images has been saved.
+The percentage of bad pixels in case - Cloth4, with method: SSD
+0.2331315129995346 0.25284940004348755
+Images has been saved.
+The percentage of bad pixels in case - Cloth4, with method: NCC
+0.19970040023326874 0.21664689481258392
+Images has been saved.
+The percentage of bad pixels in case - Cloth4, with method: ASW
+0.22338181734085083 0.24157044291496277
+Images has been saved.
+The percentage of bad pixels in case - Cloth4, with method: SSD
+0.46313589811325073 0.4825853705406189
+Images has been saved.
+The percentage of bad pixels in case - Cloth4, with method: NCC
+0.2835278809070587 0.2968541383743286
+Images has been saved.
+The percentage of bad pixels in case - Flowerpots, with method: SSD
+0.593629777431488 0.5968767404556274
+Images has been saved.
+The percentage of bad pixels in case - Flowerpots, with method: NCC
+0.3941121995449066 0.39596760272979736
+Images has been saved.
+The percentage of bad pixels in case - Flowerpots, with method: ASW
+0.5957387685775757 0.5965675115585327
+Images has been saved.
+The percentage of bad pixels in case - Flowerpots, with method: SSD
+0.9443131685256958 0.939068615436554
+Images has been saved.
+The percentage of bad pixels in case - Flowerpots, with method: NCC
+0.4267116189002991 0.4101366698741913
+Images has been saved.
+The percentage of bad pixels in case - Lampshade1, with method: SSD
+0.6064290404319763 0.597509503364563
+Images has been saved.
+The percentage of bad pixels in case - Lampshade1, with method: NCC
+0.4570563733577728 0.44866111874580383
+Images has been saved.
+The percentage of bad pixels in case - Lampshade1, with method: ASW
+0.6163285970687866 0.6069159507751465
+Images has been saved.
+The percentage of bad pixels in case - Lampshade1, with method: SSD
+0.8947943449020386 0.9052867889404297
+Images has been saved.
+The percentage of bad pixels in case - Lampshade1, with method: NCC
+0.4977966547012329 0.47423380613327026
+Images has been saved.
+The percentage of bad pixels in case - Lampshade2, with method: SSD
+0.7354472279548645 0.7289682030677795
+Images has been saved.
+The percentage of bad pixels in case - Lampshade2, with method: NCC
+0.4691155254840851 0.45070844888687134
+Images has been saved.
+The percentage of bad pixels in case - Lampshade2, with method: ASW
+0.741632878780365 0.7377192378044128
+Images has been saved.
+The percentage of bad pixels in case - Lampshade2, with method: SSD
+0.9327320456504822 0.9414081573486328
+Images has been saved.
+The percentage of bad pixels in case - Lampshade2, with method: NCC
+0.5372448563575745 0.5005305409431458
+Images has been saved.
+The percentage of bad pixels in case - Midd1, with method: SSD
+0.6279453635215759 0.6254577040672302
+Images has been saved.
+The percentage of bad pixels in case - Midd1, with method: NCC
+0.5762394666671753 0.574798047542572
+Images has been saved.
+The percentage of bad pixels in case - Midd1, with method: ASW
+0.6209474205970764 0.6202150583267212
+Images has been saved.
+The percentage of bad pixels in case - Midd1, with method: SSD
+0.8040336966514587 0.7937867045402527
+Images has been saved.
+The percentage of bad pixels in case - Midd1, with method: NCC
+0.5881662368774414 0.5826097130775452
+Images has been saved.
+The percentage of bad pixels in case - Midd2, with method: SSD
+0.7123908400535583 0.7193881869316101
+Images has been saved.
+The percentage of bad pixels in case - Midd2, with method: NCC
+0.5716899037361145 0.5752004981040955
+Images has been saved.
+The percentage of bad pixels in case - Midd2, with method: ASW
+0.7070032954216003 0.7139590382575989
+Images has been saved.
+The percentage of bad pixels in case - Midd2, with method: SSD
+0.7910187244415283 0.781366229057312
+Images has been saved.
+The percentage of bad pixels in case - Midd2, with method: NCC
+0.5889634490013123 0.5868488550186157
+Images has been saved.
+The percentage of bad pixels in case - Monopoly, with method: SSD
+0.6735403537750244 0.6617168188095093
+Images has been saved.
+The percentage of bad pixels in case - Monopoly, with method: NCC
+0.47315600514411926 0.45700690150260925
+Images has been saved.
+The percentage of bad pixels in case - Monopoly, with method: ASW
+0.7170276641845703 0.7127631306648254
+Images has been saved.
+The percentage of bad pixels in case - Monopoly, with method: SSD
+0.5736624002456665 0.5658165812492371
+Images has been saved.
+The percentage of bad pixels in case - Monopoly, with method: NCC
+0.4983161389827728 0.4733756184577942
+Images has been saved.
+The percentage of bad pixels in case - Plastic, with method: SSD
+0.8181011080741882 0.8266308903694153
+Images has been saved.
+The percentage of bad pixels in case - Plastic, with method: NCC
+0.6847677230834961 0.6854705810546875
+Images has been saved.
+The percentage of bad pixels in case - Plastic, with method: ASW
+0.8170723915100098 0.8260430693626404
+Images has been saved.
+The percentage of bad pixels in case - Plastic, with method: SSD
+0.9135007262229919 0.9081017374992371
+Images has been saved.
+The percentage of bad pixels in case - Plastic, with method: NCC
+0.7064149379730225 0.6982940435409546
+Images has been saved.
+The percentage of bad pixels in case - Rocks1, with method: SSD
+0.2505945861339569 0.2443879246711731
+Images has been saved.
+The percentage of bad pixels in case - Rocks1, with method: NCC
+0.18999682366847992 0.1830461025238037
+Images has been saved.
+The percentage of bad pixels in case - Rocks1, with method: ASW
+0.2534308433532715 0.24670270085334778
+Images has been saved.
+The percentage of bad pixels in case - Rocks1, with method: SSD
+0.592585027217865 0.5757138133049011
+Images has been saved.
+The percentage of bad pixels in case - Rocks1, with method: NCC
+0.19130682945251465 0.1832686811685562
+Images has been saved.
+The percentage of bad pixels in case - Rocks2, with method: SSD
+0.2419777363538742 0.2251891940832138
+Images has been saved.
+The percentage of bad pixels in case - Rocks2, with method: NCC
+0.18609221279621124 0.17013037204742432
+Images has been saved.
+The percentage of bad pixels in case - Rocks2, with method: ASW
+0.24690620601177216 0.23123688995838165
+Images has been saved.
+The percentage of bad pixels in case - Rocks2, with method: SSD
+0.5650238394737244 0.5450493097305298
+Images has been saved.
+The percentage of bad pixels in case - Rocks2, with method: NCC
+0.1865500807762146 0.17044197022914886
+Images has been saved.
+The percentage of bad pixels in case - Wood1, with method: SSD
+0.41545331478118896 0.4061446487903595
+Images has been saved.
+The percentage of bad pixels in case - Wood1, with method: NCC
+0.24853037297725677 0.23392868041992188
+Images has been saved.
+The percentage of bad pixels in case - Wood1, with method: ASW
+0.44058194756507874 0.4326689839363098
+Images has been saved.
+The percentage of bad pixels in case - Wood1, with method: SSD
+0.8685197234153748 0.8784316182136536
+Images has been saved.
+The percentage of bad pixels in case - Wood1, with method: NCC
+0.25521320104599 0.23870128393173218
+Images has been saved.
+The percentage of bad pixels in case - Wood2, with method: SSD
+0.49445170164108276 0.4965330958366394
+Images has been saved.
+The percentage of bad pixels in case - Wood2, with method: NCC
+0.2358247935771942 0.2420627474784851
+Images has been saved.
+The percentage of bad pixels in case - Wood2, with method: ASW
+0.5182976126670837 0.5139919519424438
+Images has been saved.
+The percentage of bad pixels in case - Wood2, with method: SSD
+0.9089593291282654 0.9143957495689392
+Images has been saved.
+The percentage of bad pixels in case - Wood2, with method: NCC
+0.2649083435535431 0.25941595435142517
+Images has been saved.

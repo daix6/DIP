@@ -3,10 +3,10 @@ public class ASW implements MatchingCost {
 
   public ASW() {
     this.k = 1;
-    this.gammaC = 7;
-    this.gammaP = 36;
+    this.gammaC = 45;
+    this.gammaP = 5;
   }
-  
+
   public ASW(double k, double gammaC, double gammaP) {
     this.k = k;
     this.gammaC = gammaC;
@@ -15,7 +15,7 @@ public class ASW implements MatchingCost {
 
   // It should not be used.
   public double matchingCost(double[][] left, double[][] right) { return 0; }
- 
+
   public double matchingCostLab(int[][] left, int[][] right, int[][] leftLab, int[][] rightLab) {
     int M = left.length, N = left[0].length;
     int centerI = M / 2, centerJ = N / 2;
@@ -49,7 +49,7 @@ public class ASW implements MatchingCost {
 
     return Math.abs(pR - pdR) + Math.abs(pG - pdG) + Math.abs(pB - pdB);
   }
-  
+
   private double similarity(int pLab, int qLab) {
     int pL = ((int)pLab >> 16) & 0xff,
         pA = ((int)pLab >> 8) & 0xff,
@@ -58,10 +58,10 @@ public class ASW implements MatchingCost {
     int qL = ((int)qLab >> 16) & 0xff,
         qA = ((int)qLab >> 8) & 0xff,
         qB = ((int)qLab) & 0xff;
- 
+
     return Math.sqrt(Math.pow(pL-qL, 2) + Math.pow(pA-qA, 2) + Math.pow(pB-qB, 2)) / this.gammaC;
   }
-  
+
   private double proximity(int px, int py, int qx, int qy) {
     return Math.sqrt(Math.pow(px - qx, 2) + Math.pow(py - qy, 2)) / this.gammaP;
   }
