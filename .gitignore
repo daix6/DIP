@@ -13,6 +13,7 @@ hw*/assets/**/*
 **/doc/*
 !**/doc/*.md
 !**/doc/*.tex
+!**/doc/*.bib
 !**/doc/*.png
 
 ## Project
