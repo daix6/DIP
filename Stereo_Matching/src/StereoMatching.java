@@ -1,5 +1,11 @@
+/**
+ * @author Shawn Dai
+ */
 import java.awt.image.BufferedImage;
 
+/** StereoMatching
+ * Provide methods to caculate disparity map and evaluate it's quality
+ */
 public class StereoMatching {
   public BufferedImage left, right;
   public BufferedImage disp_l, disp_r;
@@ -10,6 +16,14 @@ public class StereoMatching {
     this(left, right, 79, 5);
   }
 
+  /**
+   * @param leff left eye image
+   * @param right right eye image
+   * @param max_disparity max possible dispairty value
+   * @param patch the size of support window
+   * 
+   * Constructor
+   */
   public StereoMatching(BufferedImage left, BufferedImage right, int max_disparity, int patch) {
     this.left = left;
     this.right = right;
@@ -17,20 +31,27 @@ public class StereoMatching {
     this.patch = patch;
   }
 
+  /**
+   * @param mc the method caculating the matching cost
+   *
+   * Caculate disparity map (RGB only) and save to member variable
+   */
   public void caculateDisparity(MatchingCost mc) {
     double[][] left = Utils.getIntensity(this.left),
             right = Utils.getIntensity(this.right);
-    
+
     int M = left.length, N = left[0].length; // M-Height, N-Width
 
+    // construct new images
     this.disp_l = new BufferedImage(N, M, BufferedImage.TYPE_BYTE_GRAY);
     this.disp_r = new BufferedImage(N, M, BufferedImage.TYPE_BYTE_GRAY);
 
+    // array to save the disparity value
     int[] ld = new int[M*N], rd = new int[M*N];
-    
+
     for (int i = 0; i < M; i++) {
       for (int j = 0; j < N; j++) {
-        double[][] lp = getPatch(left, i, j),
+        double[][] lp = getPatch(left, i, j),  // Get support window with this.size
                    rp = getPatch(right, i, j);
 
         // For left eye image disparity map
@@ -38,7 +59,9 @@ public class StereoMatching {
         int min_d = 0;
         for (int d = 0; d <= this.max_d; d++) {
           double[][] rp_d = getPatch(right, i, j - d);
-          double matchingCost = mc.matchingCost(lp, rp_d);
+          double matchingCost = mc.matchingCost(lp, rp_d)
+
+          // find d which produce miniest matching cost
           if (matchingCost < cost) {
             cost = matchingCost;
             min_d = d;
@@ -61,10 +84,16 @@ public class StereoMatching {
       }
     }
 
+    // set pixels for disparity map
     this.disp_l.getRaster().setPixels(0, 0, N, M, ld);
     this.disp_r.getRaster().setPixels(0, 0, N, M, rd);
   }
 
+  /**
+   * @param mc the method caculating the matching cost
+   *
+   * Caculate disparity map (RGB and Lab) and save to member variable
+   */
   public void caculateDisparityCIELab(MatchingCost mc) {
     int[][] left = Utils.getPixels(this.left),
             right = Utils.getPixels(this.right);
@@ -120,7 +149,12 @@ public class StereoMatching {
     this.disp_r.getRaster().setPixels(0, 0, N, M, rd);
   }
 
-  // Helper
+  /**
+   * @param benchmark_left standard left disparity map
+   * @param benchmark_right standard right disparity map
+   * 
+   * Evaluate the disparity map's quality, compared with "ground truth".
+   */
   public void evaluate(BufferedImage benchmark_left, BufferedImage benchmark_right) {
     try {
       if (this.disp_l.getType() != BufferedImage.TYPE_BYTE_GRAY || this.disp_r.getType() != BufferedImage.TYPE_BYTE_GRAY) {
@@ -148,6 +182,7 @@ public class StereoMatching {
     }
   }
 
+  // Used to print the quality of disparity map for debugging
   public void printBad(String testcase, String method) {
     System.out.println("The percentage of bad pixels in case - " + testcase + ", with method: " + method);
     System.out.print(this.badRate[0]);
@@ -155,6 +190,12 @@ public class StereoMatching {
     System.out.println(this.badRate[1]);
   }
 
+  /**
+   * @param intensity the intensity array of origin image
+   * @param x the coordinate-x of the center of the support window desired
+   * @param y the coordinate-y of the center of the support window desired
+   * @return the support window with this.size
+   */
   private double[][] getPatch(double[][] intensity, int x, int y) {
     double[][] patch = new double[this.patch][this.patch];
     int M = intensity.length, N = intensity[0].length;
@@ -170,7 +211,9 @@ public class StereoMatching {
     }
     return patch;
   }
-  
+
+  // Just an int version of the former
+  @override
   private int[][] getPatch(int[][] pixels, int x, int y) {
       int[][] patch = new int[this.patch][this.patch];
       int M = pixels.length, N = pixels[0].length;

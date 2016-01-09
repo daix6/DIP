@@ -1,3 +1,8 @@
+/**
+ * @author Shawn Dai
+ * 
+ * Sum of Squared Difference
+ */
 public class SSD implements MatchingCost {
   public double matchingCost(double[][] left, double[][] right) {
     double cost = 0;
@@ -11,6 +16,6 @@ public class SSD implements MatchingCost {
     return cost;
   }
 
-  // It should not be used.
+  // This function should not be used.
   public double matchingCostLab(int[][] left, int[][] right, int[][] leftLab, int[][] rightLab) {return 0;}
 }

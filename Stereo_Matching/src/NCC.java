@@ -1,3 +1,9 @@
+/**
+ * @author Shawn Dai
+ * 
+ * Normalized Correlation Coefficient
+ * @reference https://en.wikipedia.org/wiki/Cross-correlation#Normalized_cross-correlation
+ */
 public class NCC implements MatchingCost {
   public double matchingCost(double[][] left, double[][] right) {
     double cost = 0;
@@ -10,6 +16,7 @@ public class NCC implements MatchingCost {
         mean_r += right[i][j];
       }
 
+    // Mean
     mean_l /= (M * N);
     mean_r /= (M * N);
 
@@ -19,6 +26,7 @@ public class NCC implements MatchingCost {
         std_r += Math.pow(right[i][j] - mean_r, 2);
       }
 
+    // Standard Variance
     std_l = Math.sqrt(std_l/(M * N));
     std_r = Math.sqrt(std_r/(M * N));
 
@@ -26,9 +34,10 @@ public class NCC implements MatchingCost {
       for (int j = 0; j < N; j++)
         cost += (left[i][j] - mean_l) * (right[i][j] - mean_r);
 
+    // Because the normalized correlation coefficient is negative proportional to the matching cost...
     return 1000 - cost / (M * N * std_l * std_r);
   }
 
-  // It should not be used.
+  // This function should not be used.
   public double matchingCostLab(int[][] left, int[][] right, int[][] leftLab, int[][] rightLab) {return 0;}
 }

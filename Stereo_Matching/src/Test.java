@@ -1,8 +1,12 @@
-import java.awt.Color;
+/**
+ * @author Shawn Dai
+ */
 import java.awt.image.BufferedImage;
-
 import org.apache.commons.cli.CommandLine;
 
+/**
+ * Test is an test class.
+ */
 public class Test {
   public static void runAllCases() {
     String[] cases = Utils.getAllCases();
@@ -49,9 +53,10 @@ public class Test {
   }
 
   public static void main(String[] args) {
-    // TODO Auto-generated method stub
+    // Process arguments and handle
     CommandLine cmd = Utils.parser(args);
 
+    // With argument 'case', then run single case
     if (cmd.hasOption("case")) {
         String testcase = cmd.getOptionValue("case");
         BufferedImage left = Utils.getImage(testcase, Utils.LEFT),
@@ -95,6 +100,7 @@ public class Test {
         Utils.saveImage(new BufferedImage[]{sm10.disp_l, sm10.disp_r}, testcase, "NCC_ADD_10");
 
     } else if (cmd.hasOption("all")) {
+      // With argument 'all', then run all cases
         runAllCases();
     }
   }

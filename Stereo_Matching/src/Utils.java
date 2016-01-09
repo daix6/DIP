@@ -1,3 +1,6 @@
+/**
+ * @author Shawn Dai
+ */
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
@@ -11,6 +14,9 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * Utils provides many utilities for convenience
+ */
 public class Utils {
   static public final int LEFT = 0;
   static public final int RIGHT = 1;
@@ -21,6 +27,10 @@ public class Utils {
   static public final String LEFT_BENCHMARK = "disp1.png";
   static public final String RIGHT_BENCHMARK = "disp5.png";
 
+  /**
+   * @param args the input arguments
+   * @return the processed result
+   */
   public static CommandLine parser(String[] args) {
     Options opts = new Options();
     opts.addOption("case", true, "The testcase that you want to run with");
@@ -38,6 +48,9 @@ public class Utils {
     return cmd;
   }
 
+  /**
+   * @return "../assets/"
+   */
   public static String getAssetsDir() {
     File file = new File("");
     String parentDir = file.getAbsolutePath();
@@ -45,6 +58,9 @@ public class Utils {
     return assetsDir;
   }
 
+  /**
+   * @return "../dest/"
+   */
   public static String getDestDir() {
     File file = new File("");
     String parentDir = file.getAbsolutePath();
@@ -52,6 +68,9 @@ public class Utils {
     return destDir;
   }
 
+  /**
+   * @return all testcases' names' array
+   */
   public static String[] getAllCases() {
     File file = new File(Utils.getAssetsDir());
     File[] cases = file.listFiles();
@@ -61,6 +80,11 @@ public class Utils {
     return testcases;
   }
 
+  /**
+   * @param testcase the name of testcase
+   * @param which left or right or benchmark_left or benchmark_right
+   * @return the image in BufferedImage type
+   */
   public static BufferedImage getImage(String testcase, int which) {
     String assetsFolder = getAssetsDir(), filename;
 
@@ -99,6 +123,10 @@ public class Utils {
     return img;
   }
 
+  /**
+   * @param image the image
+   * @return the pixels array of image
+   */
   public static int[][] getPixels(BufferedImage image) {
     int type = image.getType();
     int w = image.getWidth(), h = image.getHeight();
@@ -106,14 +134,13 @@ public class Utils {
     int[][] pixels = new int[h][w];
 
     if (type == BufferedImage.TYPE_3BYTE_BGR) {
-      final int pLength = 3;
-      for (int p = 0, row = 0, col = 0; p < data.length; p += pLength) {
+      for (int p = 0, row = 0, col = 0; p < data.length; p += 3) {
         int argb = 0;
         argb += -16777216;                        // 255
         argb += ((int) data[p] & 0xff);           // blue
         argb += (((int) data[p+1] & 0xff) << 8);  // green
         argb += (((int) data[p+2] & 0xff) << 16); // red
-        pixels[row][col] = argb;
+        pixels[row][col] = argb;                  // 24 bit form : alpha | r | g | b
         col++;
         if (col == w) {
           col = 0;
@@ -135,6 +162,10 @@ public class Utils {
     return pixels;
   }
 
+  /**
+   * @param image the image
+   * @return the intensity array of image
+   */
   public static double[][] getIntensity(BufferedImage image) {
     int type = image.getType();
     int w = image.getWidth(),  h = image.getHeight();
@@ -146,7 +177,7 @@ public class Utils {
         int B = (int) data[p] & 0xff;           // blue
         int G = (int) data[p+1] & 0xff;         // green
         int R = (int) data[p+2] & 0xff;         // red
-        intensity[row][col] = 0.2989 * R + 0.5870 * G + 0.1140 * B;
+        intensity[row][col] = 0.2989 * R + 0.5870 * G + 0.1140 * B; // The intensity
         col++;
         if (col == w) {
           col = 0;
@@ -168,6 +199,13 @@ public class Utils {
     return intensity;
   }
 
+  /**
+   * @param image the image
+   * @param intensity the amount of intensity you want to add
+   * @return the result of image added intensity
+   *
+   * Add intensity element-wise
+   */
   public static BufferedImage addIntensity(BufferedImage image, double intensity) {
     int w = image.getWidth(), h = image.getHeight();
 
@@ -184,6 +222,13 @@ public class Utils {
     return modified;
   }
 
+  /**
+   * @param image to save
+   * @param testcase the testcase
+   * @param method the method caculating the matching cost
+   *
+   * Save image with filename like testcase_disp[x]_method.png
+   */
   public static void saveImage(BufferedImage[] image, String testcase, String method) {
     BufferedImage left = image[0], right = image[1];
 
@@ -199,6 +244,7 @@ public class Utils {
 
     for (int i = 0; i < M; i++) {
       for (int j = 0; j < N; j++) {
+        // Times 3 for better visuality
         lr.setSample(j, i, 0, lr.getSample(j, i, 0) * 3);
         rr.setSample(j, i, 0, rr.getSample(j, i, 0) * 3);
       }
@@ -208,7 +254,7 @@ public class Utils {
       String path = getDestDir() + File.separator + testcase + File.separator;
       File l = new File(path + testcase + "_disp1_" + method + ".png");
       File r = new File(path + testcase + "_disp5_" + method + ".png");
-      l.mkdirs();
+      l.mkdirs(); // If not exists then create
       ImageIO.write(left, "PNG", l);
       ImageIO.write(right, "PNG", r);
       System.out.println("Images has been saved.");
@@ -217,6 +263,7 @@ public class Utils {
     }
   }
 
+  // transform an 24bit form rgb value to 8-bit gray value
   public static double rgb2gray(int rgb) {
     int R = ((int)(rgb >> 16)) & 0xff,
         G = ((int)(rgb >> 8)) & 0xff,
@@ -225,6 +272,13 @@ public class Utils {
     return 0.2989 * R + 0.5870 * G + 0.1140 * B;
   }
 
+  /**
+   * @param image the representation of image in rgb color space
+   * @return the representation of image in lab color space
+   *
+   * @reference http://stackoverflow.com/questions/4593469/java-how-to-convert-rgb-color-to-cie-lab
+   * RGB color space to L*a*b* color space
+   */
   public static int[][] rgb2lab(int[][] image) {
     int M = image.length, N = image[0].length;
     int[][] labs = new int[M][N];

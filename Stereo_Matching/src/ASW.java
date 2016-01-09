@@ -1,3 +1,8 @@
+/**
+ * @author Shawn Dai
+ * 
+ * Adaptive Support Weight
+ */
 public class ASW implements MatchingCost {
   public double k, gammaC, gammaP;
 
@@ -7,13 +12,18 @@ public class ASW implements MatchingCost {
     this.gammaP = 5;
   }
 
+  /**
+    * @param k the k used to compute omega
+    * @param gammaC the weight of similarity
+    * @param gammaP the weight of proximity
+    */
   public ASW(double k, double gammaC, double gammaP) {
     this.k = k;
     this.gammaC = gammaC;
     this.gammaP = gammaP;
-  }
+ }
 
-  // It should not be used.
+  // This function should not be used.
   public double matchingCost(double[][] left, double[][] right) { return 0; }
 
   public double matchingCostLab(int[][] left, int[][] right, int[][] leftLab, int[][] rightLab) {
@@ -34,10 +44,12 @@ public class ASW implements MatchingCost {
     return nominator / denominator;
   }
 
+  // Compute w(omega)
   private double w(int pLab, int qLab, int px, int py, int qx, int qy) {
     return this.k * Math.exp(-similarity(pLab, qLab) - proximity(px, py, qx, qy));
   }
 
+  // Compute rgb difference
   private double e(int pRGB, int pdRGB) {
     int pR = ((int)pRGB >> 16) & 0xff,
         pG = ((int)pRGB >> 8) & 0xff,
@@ -50,6 +62,11 @@ public class ASW implements MatchingCost {
     return Math.abs(pR - pdR) + Math.abs(pG - pdG) + Math.abs(pB - pdB);
   }
 
+  /**
+   * @param pLab a rgb value
+   * @param qLab a rgb value
+   * @return the color similarity
+   */
   private double similarity(int pLab, int qLab) {
     int pL = ((int)pLab >> 16) & 0xff,
         pA = ((int)pLab >> 8) & 0xff,
@@ -62,6 +79,13 @@ public class ASW implements MatchingCost {
     return Math.sqrt(Math.pow(pL-qL, 2) + Math.pow(pA-qA, 2) + Math.pow(pB-qB, 2)) / this.gammaC;
   }
 
+  /**
+   * @param px coordinate-x of center pixel
+   * @param py coordinate-y of center pixel
+   * @param qx coordinate-x of the other pixel
+   * @param qx coordinate-y of the other pixel
+   * @return the position proximity
+   */
   private double proximity(int px, int py, int qx, int qy) {
     return Math.sqrt(Math.pow(px - qx, 2) + Math.pow(py - qy, 2)) / this.gammaP;
   }
